@@ -5,10 +5,9 @@ html, body {
     font-family: 'Roboto', sans-serif; /* Gebruik Roboto font */
     font-size: 16px;
     font-weight: 500; /* Iets zwaarder dan normaal */
-    line-height: 1.4; /* Iets meer ruimte tussen regels dan 18px */
+    line-height: 1.4; /* Iets meer ruimte tussen regels */
     margin: 0; /* Verwijder default browser margin */
     padding: 0; /* Verwijder default browser padding */
-    /* text-align: center; - Liever niet globaal, we centreren #content apart */
 }
 
 /* === Hoofdcontainer === */
@@ -21,29 +20,41 @@ html, body {
     color: #333;
     border: 1px solid #cccccc; /* Subtiele rand rond content */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Kleine schaduw */
+    overflow: hidden; /* Voorkomt dat myForm margin-top erbuiten steekt */
 }
 
 /* === Header Sectie (#top) === */
 #top {
     display: flex; /* Gebruik Flexbox voor layout */
     flex-wrap: wrap; /* Items mogen naar volgende regel */
-    justify-content: space-between; /* Ruimte tussen items (werkt niet goed met 100% width items) */
+    justify-content: center; /* Centreer items horizontaal */
     width: 100%; /* Neem volledige breedte van #content */
     height: auto;
     background-color: #663ab7; /* Paarse achtergrond */
     color: #ffffff; /* Witte tekst */
-    padding: 10px; /* Padding rondom */
+    padding: 10px 20px; /* Padding rondom, iets meer horizontaal */
     box-sizing: border-box; /* Padding telt mee in de breedte */
     text-align: center; /* Centreer tekst binnen #top */
 }
 
-/* Specifieke styling voor #top divs (gebruik liever classes, maar we volgen het voorbeeld) */
-#top div:nth-child(1) { width: 100%; padding: 10px 0px 3px 0px; font-size: 28px; line-height: 30px; font-weight: bold; } /* Titel */
-#top div:nth-child(2) { width: 100%; padding: 2px 0px 5px 0px; font-size: 22px; line-height: 23px; } /* Ondertitel */
-#top div:nth-child(3) { width: 100%; height: 14px; } /* Spacer */
-#top div:nth-child(n + 4):not(:nth-child(6)):not(:nth-child(9)) { width: 100%; padding: 1px 10px 1px 10px; } /* Datum, Plaats, Uur, Adres - Meer generiek */
-#top div:nth-child(6) { width: 100%; height: 1px; } /* Mini spacer */
-#top div:nth-child(9) { width: 100%; font-size: 22px; line-height: 22px; } /* Laatste spacer? Lijkt overbodig */
+/* Specifieke styling voor #top divs */
+#top div { width: 100%; } /* Maak alle divs standaard 100% breed */
+#top div:nth-child(1) { padding: 10px 0px 3px 0px; font-size: 28px; line-height: 1.1; font-weight: bold; } /* Titel */
+#top div:nth-child(2) { padding: 2px 0px 8px 0px; font-size: 22px; line-height: 1.1; } /* Ondertitel */
+#top div:nth-child(3) { height: 10px; } /* Spacer */
+#top div:nth-child(4), /* Datum */
+#top div:nth-child(5), /* Plaats */
+#top div:nth-child(7), /* Uur */
+#top div:nth-child(8) { /* Adres */
+     padding: 2px 10px;
+     font-size: 16px; /* Standaard grootte */
+     line-height: 1.3;
+}
+#top div:nth-child(6), /* Spacer */
+#top div:nth-child(9) { /* Spacer */
+    height: 5px;
+}
+
 
 /* === Formulier Sectie (#myForm) === */
 #myForm {
@@ -51,10 +62,8 @@ html, body {
     position: relative; /* Nodig voor absolute positionering van logo/popup */
     width: 520px; /* Breedte van het formulier zelf */
     height: auto;
-    padding: 20px 20px 20px 25px;
-    margin: 0 auto; /* Centreer het formulier binnen #content */
-    /* left: 45px; top: -16px; - Positionering via margin is vaak beter */
-    margin-top: -16px; /* Trek het formulier iets omhoog over de #top rand */
+    padding: 25px 25px 20px 25px; /* Iets meer padding */
+    margin: -16px auto 20px auto; /* Trek formulier omhoog, centreer, ruimte onderaan */
     background-color: #ffffff; /* Witte achtergrond */
     font-size: 16px;
     font-weight: 500;
@@ -68,13 +77,17 @@ html, body {
 }
 
 /* Marges voor elementen direct binnen myForm en specifieke classes */
-#myForm > * { display: block; margin-bottom: 15px; } /* Standaard marge onder elk element */
+#myForm > *:not(#logoDL):not(#containerBevestiging) { /* Selecteer alle directe kinderen behalve logo/popup */
+    display: block;
+    margin-bottom: 18px; /* Standaard marge onder elk element */
+}
 #myForm .inln { /* Voor inline elementen zoals radio/checkbox labels */
   display: inline-block; /* Laat ze naast elkaar staan */
-  margin: 3px 10px 3px 3px; /* Kleine marge */
+  margin: 0 10px 0 3px; /* Kleine marge (geen bottom margin hier) */
   vertical-align: middle; /* Lijn ze mooi uit met radio/checkbox */
+  font-weight: normal; /* Zorg dat label naast radio/checkbox normaal is */
 }
-#myForm .lnfd { margin-bottom: 22px; } /* Extra marge onderaan voor bepaalde elementen */
+#myForm .lnfd { margin-bottom: 25px; } /* Extra marge onderaan voor bepaalde elementen */
 
 /* === Labels en Foutmeldingen === */
 label {
@@ -86,24 +99,27 @@ label {
 
 label span {
     visibility: hidden; /* Standaard verborgen */
-    position: relative; /* Of absolute, afhankelijk van gewenste positie */
+    position: relative;
     left: 8px;
-    top: 2px; /* Iets aanpassen voor betere uitlijning */
+    top: 0; /* Uitlijnen met tekst */
     font-size: 13px;
     font-weight: 600;
     color: #ff0000; /* Rood */
     background-color: #ffffff; /* Witte achtergrond voor leesbaarheid */
-    padding: 0 3px; /* Kleine padding */
+    padding: 1px 4px; /* Kleine padding */
+    border-radius: 3px; /* Afgeronde hoekjes */
     display: inline; /* Zodat het niet een hele regel breekt */
+    margin-left: 5px; /* Ruimte tussen label en span */
 }
 
 /* === Input Velden en Textarea === */
 input[type=text],
-input[type=email], /* Voeg email toe */
+input[type=email],
 textarea {
-    font-size: 16px; /* Iets kleiner dan origineel */
+    font-size: 16px;
     line-height: 1.4;
     font-weight: 500;
+    font-family: 'Roboto', sans-serif; /* Zorg dat font consistent is */
     border: 1px #a0a0c0 solid; /* Standaard rand */
     outline: 0px #ffffff solid;
     padding: 8px 10px; /* Padding binnen het veld */
@@ -111,12 +127,13 @@ textarea {
     width: 100%; /* Maak velden standaard volle breedte van de container */
     max-width: 400px; /* Maar niet breder dan 400px */
     margin-top: 3px; /* Kleine ruimte na label */
+    border-radius: 3px; /* Lichte afronding */
 }
 input[type=text]:focus,
 input[type=email]:focus,
 textarea:focus {
     border-color: #663ab7; /* Randkleur bij focus */
-    box-shadow: 0 0 3px #b388ff; /* Subtiele gloed bij focus */
+    box-shadow: 0 0 5px rgba(179, 136, 255, 0.5); /* Subtiele gloed bij focus (#b388ff met alpha) */
 }
 
 input::placeholder,
@@ -134,8 +151,8 @@ textarea::placeholder { /* Placeholder styling */
 #tel { max-width: 250px; }
 #aantal { max-width: 100px; }
 textarea#opmerkingen {
-    max-width: 350px;
-    width: 100%;
+    max-width: 100%; /* Laat textarea volle breedte nemen */
+    width: 400px; /* Geef een vaste breedte */
     resize: none; /* Behoud resize: none */
 }
 
@@ -144,83 +161,98 @@ textarea#opmerkingen {
     display: grid;
     width: 100%; /* Neem volledige breedte */
     max-width: 500px; /* Maximale breedte */
-    grid-template-columns: 20px auto 1fr; /* Kolommen: checkbox/radio - label - extra info */
+    /* Kolommen: smalle voor radio - auto voor label - 1fr voor rest (nu niet nodig) */
+    grid-template-columns: 25px auto;
     grid-template-rows: auto; /* Rijen bepalen zichzelf */
-    /* Oude grid: 10px auto auto auto 1fr ; */
-    /* Oude rows: 18px 8px repeat(3,18px) 8px repeat(6 , 18px) ; */
     justify-content: start;
-    align-items: start;
-    justify-items: start;
-    align-items: start;
-    column-gap: 15px; /* Ruimte tussen kolommen */
-    row-gap: 5px; /* Ruimte tussen rijen */
+    align-items: start; /* Lijn items bovenaan uit in hun cel */
+    column-gap: 10px; /* Ruimte tussen kolommen */
+    row-gap: 8px; /* Ruimte tussen rijen */
     border: 1px solid #eee; /* Subtiele rand rond de sectie */
     padding: 15px;
     margin-bottom: 20px; /* Ruimte onder de sectie */
     background-color: #f9f9f9; /* Lichte achtergrond */
+    border-radius: 4px; /* Lichte afronding */
 }
 
 #deelname > div:first-child { /* Titel "Deelname" */
     grid-column: 1 / -1; /* Over alle kolommen */
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* Ruimte onder titel */
 }
 
 /* Radio buttons en labels in het grid */
-#deelname input[type="radio"] {
-    grid-column: 1 / 2; /* Eerste kolom */
-    margin-top: 2px; /* Uitlijning */
-}
-#deelname label.inln { /* Label direct na radio */
-    grid-column: 2 / 3; /* Tweede kolom */
-    font-weight: normal; /* Standaard niet vet */
-    margin: 0; /* Reset marge */
+#deelname div:has(input[type="radio"]) { /* Selecteer de div die de radio bevat */
+     grid-column: 1 / -1; /* Laat deze div over alles lopen */
+     display: flex; /* Gebruik flex om radio en label naast elkaar te zetten */
+     align-items: center; /* Lijn ze verticaal uit */
+     margin-bottom: 5px; /* Kleine ruimte onder elke radio-optie */
 }
 
-/* Styling voor geselecteerde radio's (werkt niet altijd met grid) */
-/* input[type='radio']:checked + label.inln { font-weight: 600; } */
-/* JavaScript zal dit betrouwbaarder afhandelen indien nodig */
+#deelname input[type="radio"] {
+    margin: 0 5px 0 0; /* Ruimte rechts van radio */
+    width: auto; /* Override 100% width */
+    max-width: none;
+}
+#deelname label.inln { /* Label direct na radio */
+    margin: 0; /* Reset marge */
+    font-weight: normal;
+    cursor: pointer; /* Maak label klikbaar */
+}
 
 /* Info tekst in het grid */
 #deelname .info-header {
     grid-column: 1 / -1; /* Over alle kolommen */
     font-weight: bold;
-    margin-top: 10px;
+    margin-top: 15px; /* Ruimte boven de headers */
+    margin-bottom: 5px; /* Ruimte onder de headers */
+    padding-left: 5px; /* Lijn uit met opsommingen */
 }
-#deelname div[style*="visibility:hidden"] { display: none; } /* Originele spacer truuk verbergen */
 
-#deelname div > span { /* Voor de 'Ontvangt u per e-mail' lijn */
-    color: inherit;
-    visibility: visible; /* Zorgen dat het zichtbaar is */
+/* CORRECTIE: Zorg dat de opsomming-divs de volledige breedte gebruiken */
+#deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) {
+    grid-column: 1 / -1; /* Laat deze divs over alle kolommen lopen */
+    padding-left: 5px; /* Kleine indent voor de opsommingstekst */
+    margin: 2px 0; /* Kleine verticale marge */
+    line-height: 1.3; /* Iets compacter */
+    font-size: 15px; /* Iets kleiner */
 }
 
 
 /* === Attest Checkbox === */
+/* Gebruik flexbox voor betere uitlijning van checkbox en label */
+label[for="attest"] {
+    font-weight: normal; /* Normaal gewicht voor checkbox label */
+    display: flex;
+    align-items: center; /* Centreer checkbox en tekst verticaal */
+    cursor: pointer; /* Maak hele label klikbaar */
+    margin-bottom: 0; /* Geen extra ruimte nodig onder checkbox-rij */
+}
 #attest {
     width: auto; /* Checkbox niet 100% breedte */
     max-width: none;
-    margin-right: 5px;
+    margin-right: 8px; /* Ruimte tussen checkbox en tekst */
+    margin-top: 0; /* Reset margin */
+    cursor: pointer;
 }
-label[for="attest"] {
-    font-weight: normal; /* Normaal gewicht voor checkbox label */
-    display: flex; /* Gebruik flexbox voor uitlijning */
-    align-items: center; /* Centreer checkbox en tekst verticaal */
-}
+
 
 /* === Knoppen === */
 #btnSubmit,
 #fakeBtnSubmit {
-    display: inline-block; /* Laat ze inline staan indien nodig, maar JS wisselt display block/none */
+    display: inline-block;
     text-align: center;
-    font-size: 20px; /* Iets kleiner */
-    line-height: 28px;
+    font-size: 20px;
+    line-height: 1.4; /* Relatieve line-height */
     font-weight: 500;
-    padding: 8px 25px; /* Padding */
+    padding: 10px 25px; /* Iets meer padding */
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease; /* Animatie */
-    margin-top: 10px; /* Ruimte boven knop */
-    margin-bottom: 5px; /* Weinig ruimte eronder */
+    transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    width: auto; /* Breedte baseren op inhoud */
+    min-width: 150px; /* Minimale breedte */
 }
 
 /* Echte Submit Knop */
@@ -239,7 +271,7 @@ label[for="attest"] {
 #fakeBtnSubmit {
     display: block; /* Standaard zichtbaar */
     background-color: #f2f2f2; /* Licht grijs */
-    color: #d8d8d8; /* Heel licht grijs (uitgeschakeld look) */
+    color: #b0b0b0; /* Iets donkerder grijs (uitgeschakeld look) */
     border: 2px #d8d8d8 solid;
     cursor: not-allowed; /* Geef aan dat je er niet op kan klikken */
 }
@@ -247,13 +279,12 @@ label[for="attest"] {
 /* Tekst onder Fake knop */
 #txtFakeBtnSubmit {
     display: block; /* Standaard zichtbaar */
-    visibility: visible;
-    margin-left: 0; /* Geen extra indent */
-    margin-top: 5px;
-    margin-bottom: 15px; /* Ruimte onder de tekst */
+    margin-left: 0;
+    margin-top: 8px; /* Iets meer ruimte */
+    margin-bottom: 15px;
     font-size: 14px;
-    line-height: 18px;
-    font-weight: normal; /* Niet vet */
+    line-height: 1.3;
+    font-weight: normal;
     padding: 1px 0 3px 0px;
     color: #ff0000; /* Rood */
 }
@@ -261,20 +292,21 @@ label[for="attest"] {
 /* Tekst voor verplichte velden */
 #txtVerplicht {
     display: block;
-    margin-left: 0; /* Geen extra indent */
-    margin-top: 20px; /* Ruimte boven de tekst */
+    margin-left: 0;
+    margin-top: 25px; /* Ruimte boven de tekst */
     margin-bottom: 5px;
     font-size: 14px;
     font-weight: normal;
     line-height: 1.5; /* Meer ruimte */
+    color: #555; /* Iets donkerder grijs */
 }
 
 /* === Logo === */
 #logoDL {
     display: block;
     position: absolute; /* Positioneer t.o.v. #myForm */
-    top: 15px; /* Afstand van bovenkant myForm */
-    right: 20px; /* Afstand van rechterkant myForm */
+    top: 20px; /* Afstand van bovenkant myForm */
+    right: 25px; /* Afstand van rechterkant myForm */
     width: 150px; /* Iets kleiner logo */
     height: auto; /* Hoogte automatisch */
 }
@@ -289,13 +321,13 @@ label[for="attest"] {
     top: 0;
     right: 0;
     bottom: 0;
-    /* grid-template-columns: minmax( 400px, auto); */ /* Laat grid zelf bepalen */
-    /* grid-template-rows: auto; */ /* Laat grid zelf bepalen */
     justify-content: center; /* Centreer horizontaal */
-    align-content: center; /* Centreer verticaal */
-    background-color: rgba(135, 206, 250, 0.5); /* Semi-transparante achtergrond */
+    align-items: center; /* Centreer verticaal (align-content is voor meerdere rijen/kolommen) */
+    background-color: rgba(135, 206, 250, 0.6); /* Semi-transparante achtergrond, iets donkerder */
     opacity: 0; /* Start onzichtbaar voor animatie */
     transition: visibility 0s linear 0.3s, opacity 0.3s ease-in-out; /* Animatie */
+    padding: 20px; /* Ruimte zodat popup niet tegen rand plakt */
+    box-sizing: border-box;
 }
 #containerBevestiging.visible { /* Class toevoegen met JS */
     visibility: visible;
@@ -306,12 +338,12 @@ label[for="attest"] {
 
 #bevestiging {
     width: auto; /* Breedte baseren op inhoud */
-    min-width: 350px; /* Minimale breedte */
+    min-width: 320px; /* Minimale breedte voor mobiel */
     max-width: 500px; /* Maximale breedte */
     background-color: #ffffff;
     color: #000000;
     /* Gradient als header - alternatief */
-    border-top: 30px solid #7b68ee; /* Medium paarse bovenrand als header */
+    border-top: 35px solid #7b68ee; /* Medium paarse bovenrand als header */
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
@@ -320,6 +352,7 @@ label[for="attest"] {
     padding: 0; /* Padding wordt per sectie geregeld */
     display: flex; /* Flexbox voor interne layout */
     flex-direction: column; /* Items onder elkaar */
+    text-align: center; /* Centreer tekst standaard */
 }
 
 #bevestiging:hover { cursor: default; } /* Geen pointer op de box zelf */
@@ -327,17 +360,17 @@ label[for="attest"] {
 #bevestigingTitel {
     color: #ffffff; /* Witte tekst op de paarse rand */
     font-size: 18px;
-    line-height: 30px; /* Zorg dat het past in de border-top */
+    line-height: 35px; /* Zorg dat het past in de border-top */
     font-weight: bold;
     text-align: center;
     padding: 0 15px; /* Horizontale padding */
-    margin-top: -30px; /* Trek tekst omhoog in de border */
-    margin-bottom: 15px; /* Ruimte onder titel */
+    margin-top: -35px; /* Trek tekst omhoog in de border */
+    margin-bottom: 20px; /* Ruimte onder titel */
 }
 
 #bevestigingMsg {
-    padding: 10px 25px 20px 25px; /* Padding rond bericht */
-    text-align: left;
+    padding: 0 25px 25px 25px; /* Padding rond bericht */
+    text-align: center; /* Centreer bericht tekst */
     font-size: 17px;
     line-height: 1.6;
     font-weight: 500;
@@ -345,15 +378,15 @@ label[for="attest"] {
 }
 
 #bevestiging #btnOK {
-    align-self: flex-end; /* Knop rechts uitlijnen */
+    align-self: center; /* Centreer knop horizontaal */
     font-size: 16px;
     font-weight: bold;
     background-color: #e4e4e4;
     color: #333;
     border: 1px #aaa solid;
     border-radius: 5px;
-    padding: 8px 25px;
-    margin: 0px 15px 15px 0px; /* Marges */
+    padding: 8px 30px; /* Iets bredere knop */
+    margin: 0px 15px 20px 15px; /* Marges, meer ruimte onderaan */
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
@@ -366,42 +399,68 @@ label[for="attest"] {
     border: 2px solid #ff0000 !important; /* Rode rand, !important om andere te overschrijven */
 }
 
-/* === Responsive Aanpassingen (Voorbeeld) === */
+/* === Responsive Aanpassingen === */
 @media (max-width: 700px) {
     #content {
-        width: 95%; /* Maak content breder op kleinere schermen */
+        width: 98%; /* Maak content bijna volledig breed */
         margin: 10px auto;
     }
     #myForm {
-        width: 90%; /* Maak formulier breder binnen content */
-        padding: 15px;
-        margin-top: -10px;
+        width: auto; /* Laat formulier breedte van #content volgen */
+        max-width: none;
+        margin: -10px 5px 10px 5px; /* Kleinere overlap, kleine marge links/rechts */
+        padding: 20px 15px; /* Minder horizontale padding */
     }
     #logoDL {
         position: static; /* Haal logo uit absolute positionering */
         display: block;
-        margin: 15px auto; /* Centreer logo */
-        width: 120px;
+        margin: 0 auto 20px auto; /* Centreer logo, ruimte eronder */
+        width: 130px; /* Kleiner logo op mobiel */
+        order: -1; /* Probeer logo bovenaan formulier te zetten */
     }
+
+    /* Zet labels boven de input velden */
+    label { margin-bottom: 8px; }
     input[type=text],
     input[type=email],
-    textarea,
-    #naam, #voornaam, #email, #tel, #aantal, textarea#opmerkingen {
-        max-width: 100%; /* Laat velden volledige breedte innemen */
+    textarea {
+         max-width: 100%; /* Laat velden volledige breedte innemen */
+         width: 100%; /* Forceer 100% */
+         margin-top: 0; /* Geen extra ruimte nodig */
     }
+     textarea#opmerkingen {
+        width: 100%;
+    }
+
     #deelname {
-      grid-template-columns: 20px 1fr; /* Simpeler grid: checkbox - rest */
-       column-gap: 10px;
+        grid-template-columns: 25px auto; /* Behoud dit */
+        column-gap: 5px; /* Minder ruimte */
+        padding: 10px; /* Minder padding */
     }
-     #deelname label.inln {
-        grid-column: 2 / 3;
-    }
+    /* Kopjes en opsommingen volledige breedte */
+    #deelname > div:first-child,
     #deelname .info-header,
-    #deelname div:not(:first-child):not(input):not(label.inln) {
-        grid-column: 1 / -1; /* Info altijd volledige breedte */
-        margin-left: 5px;
+    #deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) {
+         grid-column: 1 / -1;
+         padding-left: 0; /* Geen extra indent nodig */
     }
+     /* Radio knop rij */
+     #deelname div:has(input[type="radio"]) {
+         padding-left: 0;
+     }
+
+    #btnSubmit,
+    #fakeBtnSubmit {
+        width: 100%; /* Maak knoppen volledige breedte */
+        box-sizing: border-box; /* Padding meerekenen */
+    }
+
     #bevestiging {
-        min-width: 80%;
+        width: 90%; /* Popup neemt 90% breedte */
+        min-width: unset; /* Reset min-width */
     }
+     #bevestigingTitel { font-size: 16px; margin-bottom: 15px; }
+     #bevestigingMsg { font-size: 15px; padding: 0 15px 20px 15px; }
+     #bevestiging #btnOK { width: 80%; padding: 10px 15px; }
+
 }
