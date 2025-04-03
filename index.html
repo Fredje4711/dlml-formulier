@@ -3,19 +3,19 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge"> <!-- Kan meestal weg, maar we houden het voor nu -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Belangrijk voor mobiel -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Inschrijfformulier Activiteit</title> <!-- Placeholder titel -->
+    <title>Inschrijfformulier Activiteit</title>
 
-    <!-- === Link naar ons CSS bestand (maken we hierna) === -->
+    <!-- === Link naar ons CSS bestand === -->
     <link rel="stylesheet" href="style.css">
 
     <!-- === Metadata (kunnen we later specifieker maken) === -->
     <meta name="Description" content="Inschrijfformulier voor DLML activiteit">
     <meta name="Author" content="Diabetes Liga Midden-Limburg">
 
-    <!-- === Font (Roboto) - kan eventueel ook weg als we standaard fonts gebruiken === -->
+    <!-- === Font (Roboto) === -->
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
 </head>
@@ -75,32 +75,30 @@
             <!-- Deelname Keuze (Fysiek/Digitaal) -->
             <div id="deelname">
                 <div>Deelname</div>
-                <div>
+                 <div> <!-- Extra div voor radio + label -->
                     <input class="inln" id="fysiek" type="radio" value="fysiek" name="keuzeDeelname" checked="checked">
                     <label class="inln" for="fysiek">Fysiek</label>
-                </div>
-                <div>
+                 </div>
+                 <div> <!-- Extra div voor radio + label -->
                     <input class="inln" id="digitaal" type="radio" value="digitaal" name="keuzeDeelname">
                     <label class="inln" for="digitaal">Digitaal</label>
                 </div>
-                <div> </div> <!-- Grid spacer -->
+                <!-- Info teksten -->
                 <div class="info-header">Fysieke deelname:</div>
                 <div>• Gratis deelname;</div>
                 <div>• Aanwezigheidsattest.</div>
-                <div> </div> <!-- Grid spacer -->
                 <div class="info-header">Digitale deelname:</div>
                 <div>• Online via platform;</div>
                 <div>• Uitleg over platform;</div>
                 <div>• Attest online deelname;</div>
                 <div>• Praktische info vooraf;</div>
-                <div><span></span>Ontvangt u per e-mail.</div><!-- Extra lijn voor uitleg-->
-                <div> </div> <!-- Grid spacer -->
+                <div><span></span>  Ontvangt u per e-mail.</div><!-- Extra lijn voor uitleg-->
             </div>
 
             <!-- Aantal Deelnemers (Verplicht *) -->
             <label for="aantal">
                 Aantal deelnemers (*)
-                <span style="left:10px; top:0px;"> gelieve het aantal deelnemers te vermelden! </span><br>
+                <span> gelieve het aantal deelnemers te vermelden! </span><br> <!-- GEEN style attribuut meer -->
                 <input class="lnfd" type="text" id="aantal" name="aantal" size="8" value="" placeholder="Aantal">
             </label>
 
@@ -111,14 +109,14 @@
 
             <!-- Opmerkingen -->
             <label for="opmerkingen">Opmerkingen</label>
-            <textarea class="lnfd" id="opmerkingen" name="opmerkingen" cols="35" rows="6" style="resize: none;"></textarea>
+            <textarea class="lnfd" id="opmerkingen" name="opmerkingen" cols="35" rows="6"></textarea>
 
             <!-- Knoppen -->
-            <!-- Echte submit knop (standaard verborgen via CSS) -->
+            <!-- Echte submit knop (standaard verborgen via CSS/JS) -->
             <button class="lnfd" id="btnSubmit" type="submit">Inschrijven</button>
-            <!-- Fake knop (standaard zichtbaar via CSS) -->
+            <!-- Fake knop (standaard zichtbaar via CSS/JS) -->
             <button id="fakeBtnSubmit" type="button">Inschrijven</button>
-            <!-- Tekst bij fake knop (standaard zichtbaar via CSS) -->
+            <!-- Tekst bij fake knop (standaard zichtbaar via CSS/JS) -->
             <div class="lnfd" id="txtFakeBtnSubmit">Gelieve alle verplichte velden in te vullen</div>
 
             <!-- Uitleg verplichte velden -->
@@ -128,11 +126,10 @@
             </div>
 
             <!-- Spacer div -->
-            <div style="width:100%; height:40px;"> </div>
+            <div style="width:100%; height:1px; margin-bottom: 0;"> </div>
 
             <!-- Logo (Pad eventueel aanpassen) -->
-            <!-- We gebruiken een placeholder image voor nu -->
-            <img id="logoDL" alt="Logo DLML" src="https://via.placeholder.com/180x60.png?text=Logo+DLML">
+            <img id="logoDL" alt="Logo DLML" src="https://via.placeholder.com/150x50.png?text=Logo+DLML"> <!-- Iets kleiner logo -->
 
             <!-- Bevestiging Pop-up Container (standaard verborgen via CSS) -->
             <div id="containerBevestiging">
@@ -152,8 +149,8 @@
 
     <!-- === JavaScript bestanden === -->
     <!-- jQuery (Nodig voor onze custom script) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- Gebruik een stabiele versie -->
-    <!-- Ons eigen script bestand (maken we hierna) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Ons eigen script bestand -->
     <script src="script.js"></script>
 
 </body>

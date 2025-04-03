@@ -100,7 +100,7 @@ label {
 label span {
     visibility: hidden; /* Standaard verborgen */
     position: relative;
-    left: 8px;
+    left: 0; /* Reset left */
     top: 0; /* Uitlijnen met tekst */
     font-size: 13px;
     font-weight: 600;
@@ -109,7 +109,7 @@ label span {
     padding: 1px 4px; /* Kleine padding */
     border-radius: 3px; /* Afgeronde hoekjes */
     display: inline; /* Zodat het niet een hele regel breekt */
-    margin-left: 5px; /* Ruimte tussen label en span */
+    margin-left: 8px; /* Ruimte tussen label en span */
 }
 
 /* === Input Velden en Textarea === */
@@ -154,6 +154,7 @@ textarea#opmerkingen {
     max-width: 100%; /* Laat textarea volle breedte nemen */
     width: 400px; /* Geef een vaste breedte */
     resize: none; /* Behoud resize: none */
+    min-height: 100px; /* Minimale hoogte */
 }
 
 /* === Deelname Sectie (Grid Layout) === */
@@ -161,7 +162,7 @@ textarea#opmerkingen {
     display: grid;
     width: 100%; /* Neem volledige breedte */
     max-width: 500px; /* Maximale breedte */
-    /* Kolommen: smalle voor radio - auto voor label - 1fr voor rest (nu niet nodig) */
+    /* Kolommen: smalle voor radio - auto voor label */
     grid-template-columns: 25px auto;
     grid-template-rows: auto; /* Rijen bepalen zichzelf */
     justify-content: start;
@@ -193,6 +194,7 @@ textarea#opmerkingen {
     margin: 0 5px 0 0; /* Ruimte rechts van radio */
     width: auto; /* Override 100% width */
     max-width: none;
+    cursor: pointer; /* Maak radio klikbaar */
 }
 #deelname label.inln { /* Label direct na radio */
     margin: 0; /* Reset marge */
@@ -269,7 +271,7 @@ label[for="attest"] {
 
 /* Fake Submit Knop */
 #fakeBtnSubmit {
-    display: block; /* Standaard zichtbaar */
+    display: block; /* Standaard zichtbaar (JS regelt dit) */
     background-color: #f2f2f2; /* Licht grijs */
     color: #b0b0b0; /* Iets donkerder grijs (uitgeschakeld look) */
     border: 2px #d8d8d8 solid;
@@ -278,7 +280,7 @@ label[for="attest"] {
 
 /* Tekst onder Fake knop */
 #txtFakeBtnSubmit {
-    display: block; /* Standaard zichtbaar */
+    display: block; /* Standaard zichtbaar (JS regelt dit) */
     margin-left: 0;
     margin-top: 8px; /* Iets meer ruimte */
     margin-bottom: 15px;
@@ -307,7 +309,7 @@ label[for="attest"] {
     position: absolute; /* Positioneer t.o.v. #myForm */
     top: 20px; /* Afstand van bovenkant myForm */
     right: 25px; /* Afstand van rechterkant myForm */
-    width: 150px; /* Iets kleiner logo */
+    width: 150px;
     height: auto; /* Hoogte automatisch */
 }
 
@@ -322,8 +324,8 @@ label[for="attest"] {
     right: 0;
     bottom: 0;
     justify-content: center; /* Centreer horizontaal */
-    align-items: center; /* Centreer verticaal (align-content is voor meerdere rijen/kolommen) */
-    background-color: rgba(135, 206, 250, 0.6); /* Semi-transparante achtergrond, iets donkerder */
+    align-items: center; /* Centreer verticaal */
+    background-color: rgba(135, 206, 250, 0.6); /* Semi-transparante achtergrond */
     opacity: 0; /* Start onzichtbaar voor animatie */
     transition: visibility 0s linear 0.3s, opacity 0.3s ease-in-out; /* Animatie */
     padding: 20px; /* Ruimte zodat popup niet tegen rand plakt */
@@ -342,7 +344,6 @@ label[for="attest"] {
     max-width: 500px; /* Maximale breedte */
     background-color: #ffffff;
     color: #000000;
-    /* Gradient als header - alternatief */
     border-top: 35px solid #7b68ee; /* Medium paarse bovenrand als header */
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
