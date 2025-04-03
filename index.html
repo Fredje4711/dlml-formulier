@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"> <!-- Kan meestal weg, maar we houden het voor nu -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Belangrijk voor mobiel -->
+
+    <title>Inschrijfformulier Activiteit</title> <!-- Placeholder titel -->
+
+    <!-- === Link naar ons CSS bestand (maken we hierna) === -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- === Metadata (kunnen we later specifieker maken) === -->
+    <meta name="Description" content="Inschrijfformulier voor DLML activiteit">
+    <meta name="Author" content="Diabetes Liga Midden-Limburg">
+
+    <!-- === Font (Roboto) - kan eventueel ook weg als we standaard fonts gebruiken === -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+
+    <div id="content">
+
+        <div id="top">
+            <!-- === Activiteit Details (Voorbeeld - aan te passen per activiteit) === -->
+            <div>Inschrijving infosessie</div>
+            <div>VOORBEELD ACTIVITEIT TITEL</div>
+            <div> </div> <!-- Lege div voor spacing -->
+            <div>Donderdag 1 januari 2025</div> <!-- Placeholder datum -->
+            <div>Locatie Voorbeeld</div> <!-- Placeholder plaats -->
+            <div> </div> <!-- Lege div voor spacing -->
+            <div>20.00 u - 22.00 u</div> <!-- Placeholder uur -->
+            <div>Straatnaam 1, 9999 Gemeente</div> <!-- Placeholder adres -->
+            <div> </div> <!-- Lege div voor spacing -->
+        </div>
+
+        <!-- === Verborgen velden voor data (Voorbeeld - aan te passen per activiteit) === -->
+        <div id="filenaam" style="display:none;">voorbeeld_lijst</div>
+        <div id="checkafzender" style="display:none;">check_voorbeeld_01012025</div>
+
+        <!-- === Het Formulier === -->
+        <!-- De 'action' laten we nu leeg (#) - Komt in Stap 2 aan bod -->
+        <form id="myForm" action="#" method="post" accept-charset="utf-8">
+
+            <!-- Naam (Verplicht) -->
+            <label class="lnfd" for="naam">
+                Naam (*)
+                <!-- Foutmelding span (standaard verborgen) -->
+                <span> gelieve uw naam in te vullen! </span><br>
+                <input type="text" id="naam" name="naam" size="30" placeholder="Naam">
+            </label>
+
+            <!-- Voornaam -->
+            <label class="lnfd" for="voornaam">
+                Voornaam<br>
+                <input type="text" id="voornaam" name="voornaam" size="25" placeholder="Voornaam">
+            </label>
+
+            <!-- E-mail (Verplicht bij digitaal **) -->
+            <label for="email">
+                E-mail (**)
+                <span> gelieve uw e-mail te noteren! </span><br>
+                <input class="lnfd" type="text" id="email" name="email" size="40" placeholder="@emaildomein.be">
+            </label>
+
+            <!-- Telefoon/GSM -->
+            <label for="tel">
+                Tel/GSM<br>
+                <input class="lnfd" type="text" id="tel" name="tel" size="25" placeholder="Telefoonnummer">
+            </label>
+
+            <!-- Deelname Keuze (Fysiek/Digitaal) -->
+            <div id="deelname">
+                <div>Deelname</div>
+                <div>
+                    <input class="inln" id="fysiek" type="radio" value="fysiek" name="keuzeDeelname" checked="checked">
+                    <label class="inln" for="fysiek">Fysiek</label>
+                </div>
+                <div>
+                    <input class="inln" id="digitaal" type="radio" value="digitaal" name="keuzeDeelname">
+                    <label class="inln" for="digitaal">Digitaal</label>
+                </div>
+                <div> </div> <!-- Grid spacer -->
+                <div class="info-header">Fysieke deelname:</div>
+                <div>• Gratis deelname;</div>
+                <div>• Aanwezigheidsattest.</div>
+                <div> </div> <!-- Grid spacer -->
+                <div class="info-header">Digitale deelname:</div>
+                <div>• Online via platform;</div>
+                <div>• Uitleg over platform;</div>
+                <div>• Attest online deelname;</div>
+                <div>• Praktische info vooraf;</div>
+                <div><span></span>Ontvangt u per e-mail.</div><!-- Extra lijn voor uitleg-->
+                <div> </div> <!-- Grid spacer -->
+            </div>
+
+            <!-- Aantal Deelnemers (Verplicht *) -->
+            <label for="aantal">
+                Aantal deelnemers (*)
+                <span style="left:10px; top:0px;"> gelieve het aantal deelnemers te vermelden! </span><br>
+                <input class="lnfd" type="text" id="aantal" name="aantal" size="8" value="" placeholder="Aantal">
+            </label>
+
+            <!-- Attest Wens -->
+            <label class="lnfd" for="attest">
+                <input id="attest" name="attest" type="checkbox" value="ja"> Wenst een deelname-attest
+            </label>
+
+            <!-- Opmerkingen -->
+            <label for="opmerkingen">Opmerkingen</label>
+            <textarea class="lnfd" id="opmerkingen" name="opmerkingen" cols="35" rows="6" style="resize: none;"></textarea>
+
+            <!-- Knoppen -->
+            <!-- Echte submit knop (standaard verborgen via CSS) -->
+            <button class="lnfd" id="btnSubmit" type="submit">Inschrijven</button>
+            <!-- Fake knop (standaard zichtbaar via CSS) -->
+            <button id="fakeBtnSubmit" type="button">Inschrijven</button>
+            <!-- Tekst bij fake knop (standaard zichtbaar via CSS) -->
+            <div class="lnfd" id="txtFakeBtnSubmit">Gelieve alle verplichte velden in te vullen</div>
+
+            <!-- Uitleg verplichte velden -->
+            <div id="txtVerplicht">
+                (*) velden zijn verplicht<br>
+                (**) verplicht voor digitale deelname
+            </div>
+
+            <!-- Spacer div -->
+            <div style="width:100%; height:40px;"> </div>
+
+            <!-- Logo (Pad eventueel aanpassen) -->
+            <!-- We gebruiken een placeholder image voor nu -->
+            <img id="logoDL" alt="Logo DLML" src="https://via.placeholder.com/180x60.png?text=Logo+DLML">
+
+            <!-- Bevestiging Pop-up Container (standaard verborgen via CSS) -->
+            <div id="containerBevestiging">
+                <div id="bevestiging">
+                    <div id="bevestigingTitel"> </div> <!-- Wordt gevuld door JS -->
+                    <div id="bevestigingMsg">Inschrijving wordt verwerkt...</div> <!-- Wordt gevuld door JS -->
+                    <div id="btnOK">Ok</div>
+                </div>
+            </div>
+
+        </form> <!-- Einde van het formulier -->
+
+        <!-- Spacer onderaan -->
+        <div style="width:100%; height:25px;"> </div>
+
+    </div> <!-- Einde van #content -->
+
+    <!-- === JavaScript bestanden === -->
+    <!-- jQuery (Nodig voor onze custom script) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- Gebruik een stabiele versie -->
+    <!-- Ons eigen script bestand (maken we hierna) -->
+    <script src="script.js"></script>
+
+</body>
+</html>
