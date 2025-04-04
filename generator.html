@@ -8,18 +8,21 @@
         /* Simpele styling voor de generator zelf */
         body { font-family: sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4; }
         .generator-section { background-color: #fff; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
-        h2 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        h1, h2, h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #333; }
+        h1 { border: none; text-align: center; margin-bottom: 30px;}
         label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], textarea { width: 95%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 3px; }
-        textarea { min-height: 60px; }
-        .checkbox-option { margin-bottom: 15px; }
-        .checkbox-option input { margin-right: 5px; }
-        .sub-options { margin-left: 25px; border-left: 2px solid #eee; padding-left: 15px; display: none; /* Standaard verborgen */ }
-        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; margin-right: 10px; }
+        input[type="text"], textarea { width: 95%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 3px; font-size: 14px; }
+        textarea { min-height: 60px; font-family: sans-serif;} /* Gebruik standaard font */
+        .checkbox-option { margin-bottom: 15px; padding: 10px; border: 1px solid #eee; border-radius: 4px; background-color: #fcfcfc;}
+        .checkbox-option > label { font-weight: bold; display: inline-block; margin-left: 5px; } /* Label naast checkbox */
+        .checkbox-option input[type="checkbox"] { margin-right: 5px; vertical-align: middle;}
+        .sub-options { margin-top: 10px; margin-left: 25px; border-left: 3px solid #ddd; padding-left: 15px; display: none; /* Standaard verborgen */ }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; margin-right: 10px; font-size: 14px; }
         button:hover { background-color: #0056b3; }
-        #output-code { width: 98%; height: 300px; font-family: monospace; font-size: 13px; }
-        #preview-area { border: 1px dashed #ccc; padding: 10px; margin-top: 15px; background-color: #fafafa; min-height: 100px; }
+        #output-code { width: 98%; height: 400px; font-family: monospace; font-size: 12px; border: 1px solid #ccc; padding: 5px; background-color: #e9e9e9; }
+        #preview-area { border: 1px dashed #ccc; padding: 0; margin-top: 15px; background-color: #fafafa; min-height: 500px; overflow: hidden;} /* Geen padding, iframe vult */
         .hidden { display: none; } /* Helper class */
+        small { color: #555; }
     </style>
 </head>
 <body>
@@ -62,16 +65,16 @@
         <h2>2. Labels Basisvelden (Pas aan indien nodig)</h2>
         <label for="gen-label-naam">Label Naam:</label>
         <input type="text" id="gen-label-naam" value="Naam (*)">
-        <!-- Voeg hier vergelijkbare input velden toe voor Voornaam, E-mail, Tel/GSM, Aantal, Opmerkingen -->
-         <label for="gen-label-voornaam">Label Voornaam:</label>
+        <label for="gen-label-voornaam">Label Voornaam:</label>
         <input type="text" id="gen-label-voornaam" value="Voornaam">
-         <label for="gen-label-email">Label E-mail:</label>
+        <label for="gen-label-email">Label E-mail:</label>
         <input type="text" id="gen-label-email" value="E-mail (**)">
-         <label for="gen-label-tel">Label Tel/GSM:</label>
+        <label for="gen-label-tel">Label Tel/GSM:</label>
         <input type="text" id="gen-label-tel" value="Tel/GSM">
-         <label for="gen-label-aantal">Label Aantal:</label>
+        <label for="gen-label-aantal">Standaard Label Aantal:</label>
         <input type="text" id="gen-label-aantal" value="Aantal deelnemers (*)">
-         <label for="gen-label-opmerkingen">Label Opmerkingen:</label>
+        <small>Dit label wordt gebruikt als 'Activiteit Aantal & Eten' hieronder *niet* is aangevinkt.</small>
+        <label for="gen-label-opmerkingen">Label Opmerkingen:</label>
         <input type="text" id="gen-label-opmerkingen" value="Opmerkingen">
     </div>
 
@@ -89,9 +92,14 @@
                 <label for="gen-label-digitaal">Tekst Label "Digitaal":</label>
                 <input type="text" id="gen-label-digitaal" value="Digitaal">
                 <label for="gen-text-fysiek">Uitleg Fysieke deelname (één punt per lijn):</label>
-                <textarea id="gen-text-fysiek">• Gratis deelname;\n• Aanwezigheidsattest.</textarea>
+                <textarea id="gen-text-fysiek">• Gratis deelname;
+• Aanwezigheidsattest.</textarea>
                 <label for="gen-text-digitaal">Uitleg Digitale deelname (één punt per lijn):</label>
-                <textarea id="gen-text-digitaal">• Online via Microsoft Teams;\n• Vanaf elke apparaat, ook zonder Teams-account;\n• Attest online deelname webbinar;\n• In de week voorafgaand aan de infosessie\n   ontvangt u verdere praktische informatie.</textarea>
+                <textarea id="gen-text-digitaal">• Online via Microsoft Teams;
+• Vanaf elke apparaat, ook zonder Teams-account;
+• Attest online deelname webbinar;
+• In de week voorafgaand aan de infosessie
+   ontvangt u verdere praktische informatie.</textarea>
             </div>
         </div>
 
@@ -100,9 +108,10 @@
              <input type="checkbox" id="gen-opt-eten" onchange="toggleSubOptions('sub-eten', this.checked)">
              <label for="gen-opt-eten">Toon Activiteit Aantal & Eten?</label>
              <div id="sub-eten" class="sub-options">
-                 <label for="gen-label-aantal-act">Label voor Aantal (bv. Aantal wandeling (*)):</label>
+                 <label for="gen-label-aantal-act">Label voor Activiteit Aantal (bv. Aantal wandeling (*)):</label>
                  <input type="text" id="gen-label-aantal-act" value="Aantal [Activiteit] (*)">
-                 <label for="gen-text-aantal-act">Prijs/Info bij Aantal:</label>
+                 <small>Dit label vervangt het standaard 'Aantal' label.</small>
+                 <label for="gen-text-aantal-act">Prijs/Info bij Activiteit Aantal:</label>
                  <textarea id="gen-text-aantal-act">aan € [Prijs] p.p.</textarea>
                  <label for="gen-label-eten">Label voor Etentje:</label>
                  <input type="text" id="gen-label-eten" value="Etentje achteraf [Locatie]">
@@ -114,30 +123,29 @@
          <!-- Optie 3: Moederdag (Vereenvoudigd - HTML invoegen) -->
          <div class="checkbox-option">
              <input type="checkbox" id="gen-opt-moederdag" onchange="toggleSubOptions('sub-moederdag', this.checked)">
-             <label for="gen-opt-moederdag">Toon Moederdag Ontbijt Opties?</label>
+             <label for="gen-opt-moederdag">Toon Moederdag Ontbijt Opties? (Specifieke HTML)</label>
              <div id="sub-moederdag" class="sub-options">
                  <label for="gen-html-moederdag">HTML voor Moederdag opties sectie:</label>
-                 <textarea id="gen-html-moederdag" rows="10" placeholder="Plak hier de volledige HTML voor de keuzesectie (bv. de div met labels en inputs)..."><!-- Voorbeeld HTML kan hier -->
-<div id="ontbijtKeuzes" style="border: 1px solid #eee; padding: 15px; margin-bottom: 15px; background: #f9f9f9;">
-    <label style="font-weight:bold; margin-bottom: 10px;">Wenst in te schrijven voor (*)</label>
-    <div style="margin-bottom: 10px;">
-        <label for="aantal_ontbijt_plaats">Ontbijt ter plaatse tussen 9.00 u en 12.00 u</label><br>
-        <input type="text" id="aantal_ontbijt_plaats_v" name="aantal_ontbijt_plaats_v" size="5" placeholder="aantal volw." style="max-width: 120px; display: inline-block; margin-right: 10px;"> volwassenen aan € 25.00<br>
-        <input type="text" id="aantal_ontbijt_plaats_k" name="aantal_ontbijt_plaats_k" size="5" placeholder="aantal kind." style="max-width: 120px; display: inline-block; margin-right: 10px;"> kinderen aan € 12.50
+                 <textarea id="gen-html-moederdag" rows="15" placeholder="Plak hier de volledige HTML voor de keuzesectie..."><!-- Voorbeeld HTML Moederdag (eventueel aanpassen) -->
+<div id="ontbijtKeuzes" style="border: 1px solid #eee; padding: 15px; margin-bottom: 18px; background: #f9f9f9; border-radius: 4px;">
+    <label style="font-weight:bold; display: block; margin-bottom: 10px;">Wenst in te schrijven voor (*)</label>
+    <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #eee;">
+        <label for="aantal_ontbijt_plaats_v" style="font-weight: normal; display:block; margin-bottom: 5px;">Ontbijt ter plaatse tussen 9.00 u en 12.00 u</label>
+        <input type="text" id="aantal_ontbijt_plaats_v" name="aantal_ontbijt_plaats_v" size="5" placeholder="aantal volw." style="max-width: 120px; width: auto; display: inline-block; margin-right: 10px;"> volwassenen aan € 25.00<br style="margin-bottom: 5px;">
+        <input type="text" id="aantal_ontbijt_plaats_k" name="aantal_ontbijt_plaats_k" size="5" placeholder="aantal kind." style="max-width: 120px; width: auto; display: inline-block; margin-right: 10px;"> kinderen aan € 12.50
     </div>
-    <div style="margin-bottom: 10px;">
-        <label for="aantal_ontbijt_afhaal">Ontbijt af te halen tussen 9.00 u en 11.00 u</label><br>
-        <input type="text" id="aantal_ontbijt_afhaal_v" name="aantal_ontbijt_afhaal_v" size="5" placeholder="aantal volw." style="max-width: 120px; display: inline-block; margin-right: 10px;"> volwassenen aan € 25.00<br>
-        <input type="text" id="aantal_ontbijt_afhaal_k" name="aantal_ontbijt_afhaal_k" size="5" placeholder="aantal kind." style="max-width: 120px; display: inline-block; margin-right: 10px;"> kinderen aan € 12.50
+    <div style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #eee;">
+        <label for="aantal_ontbijt_afhaal_v" style="font-weight: normal; display:block; margin-bottom: 5px;">Ontbijt af te halen tussen 9.00 u en 11.00 u</label>
+        <input type="text" id="aantal_ontbijt_afhaal_v" name="aantal_ontbijt_afhaal_v" size="5" placeholder="aantal volw." style="max-width: 120px; width: auto; display: inline-block; margin-right: 10px;"> volwassenen aan € 25.00<br style="margin-bottom: 5px;">
+        <input type="text" id="aantal_ontbijt_afhaal_k" name="aantal_ontbijt_afhaal_k" size="5" placeholder="aantal kind." style="max-width: 120px; width: auto; display: inline-block; margin-right: 10px;"> kinderen aan € 12.50
     </div>
     <div>
-        <label>Kookboek 'Lekker koken met diabetes'</label><br>
-        <input type="radio" id="kookboek_nee" name="kookboek" value="nee" checked style="width:auto; max-width: none; margin-right: 5px;"><label for="kookboek_nee" style="display: inline; font-weight: normal;"> geen kookboek</label><br>
-        <input type="radio" id="kookboek_ja" name="kookboek" value="ja" style="width:auto; max-width: none; margin-right: 5px;"><label for="kookboek_ja" style="display: inline; font-weight: normal;"> 1 boek aan € 30.00</label>
+        <label style="font-weight: normal; display:block; margin-bottom: 5px;">Kookboek 'Lekker koken met diabetes'</label>
+        <input type="radio" id="kookboek_nee" name="kookboek" value="nee" checked style="width:auto; max-width: none; margin-right: 5px; vertical-align: middle;"><label for="kookboek_nee" style="display: inline; font-weight: normal; cursor: pointer;"> geen kookboek</label><br style="margin-bottom: 5px;">
+        <input type="radio" id="kookboek_ja" name="kookboek" value="ja" style="width:auto; max-width: none; margin-right: 5px; vertical-align: middle;"><label for="kookboek_ja" style="display: inline; font-weight: normal; cursor: pointer;"> 1 boek aan € 30.00</label>
     </div>
-</div>
-                 </textarea>
-                 <small>Plaats de volledige HTML voor dit blok hier. Zorg dat inputvelden unieke `id` en `name` attributen hebben!</small>
+</div></textarea>
+                 <small>Plaats de volledige HTML voor dit blok hier. Zorg dat inputvelden unieke `id` en `name` attributen hebben! Het script plaatst dit blok vóór het standaard 'Aantal deelnemers' veld.</small>
              </div>
          </div>
 
@@ -145,7 +153,7 @@
         <div class="checkbox-option">
             <input type="checkbox" id="gen-opt-attest" checked onchange="toggleSubOptions('sub-attest', this.checked)">
             <label for="gen-opt-attest">Toon 'Wenst Attest' Checkbox?</label>
-             <div id="sub-attest" class="sub-options" style="display: block;"> <!-- Standaard zichtbaar als checkbox aan staat -->
+             <div id="sub-attest" class="sub-options" style="display: block;"> <!-- Standaard zichtbaar -->
                  <label for="gen-text-attest">Tekst naast checkbox:</label>
                  <input type="text" id="gen-text-attest" value="Wenst een deelname-attest">
              </div>
@@ -160,19 +168,19 @@
         <input type="text" id="gen-text-verplicht" value="(*) velden zijn verplicht">
          <label for="gen-text-email-verplicht">Tekst E-mail verplicht (**):</label>
         <input type="text" id="gen-text-email-verplicht" value="(**) verplicht voor digitale deelname">
+         <small>Deze tekst wordt alleen getoond als 'Fysiek/Digitaal' is aangevinkt.</small>
          <label for="gen-text-fake-button">Tekst onder grijze knop:</label>
         <input type="text" id="gen-text-fake-button" value="Gelieve alle verplichte velden in te vullen">
     </div>
 
 
-    <!-- Sectie 5: Preview & Output -->
+    <!-- Sectie 5: Preview & Genereren -->
     <div class="generator-section">
         <h2>5. Preview & Genereren</h2>
         <button id="btn-generate">Genereer/Update Preview & Code</button>
 
         <h3>Preview:</h3>
         <div id="preview-area">
-            <!-- Hier komt de live preview (via iframe of directe HTML injectie) -->
              <p><i>Klik op "Genereer/Update Preview & Code" om het voorbeeld te zien.</i></p>
         </div>
 
@@ -191,32 +199,219 @@
             }
         }
 
-        // --- Hier komt de complexe JavaScript logica voor het genereren ---
+        // --- Generatie Logica ---
         document.getElementById('btn-generate').addEventListener('click', function() {
-            // 1. Lees alle waarden uit de generator velden (getElementById(...).value)
-            // 2. Start met een basis HTML template string (kan inline of uit een variabele)
-            // 3. Vervang de header placeholders in de string
-            // 4. Vervang de basis label placeholders
-            // 5. Check de checkboxes voor optionele secties:
-            //    - Als bv. Fysiek/Digitaal aan staat:
-            //        - Neem de HTML structuur string voor die sectie
-            //        - Vervang de label/tekst placeholders in DIE string met de waarden uit de generator
-            //        - Voeg de resulterende HTML string in op de juiste plek in de hoofd template string
-            //    - Doe hetzelfde voor Eten, Moederdag (HTML plakken), Attest
-            // 6. Vervang de placeholders voor teksten onderaan
-            // 7. Zet de volledige, samengestelde HTML string in de #output-code textarea
-            // 8. (Optioneel/Geavanceerd) Update de #preview-area
-            alert("Generatie logica nog niet geïmplementeerd!"); // Placeholder
-             document.getElementById('output-code').value = "<!-- HTML code zou hier verschijnen -->";
-        });
+            console.log("Start generatie...");
 
+            // --- 1. Lees alle waarden uit de generator velden ---
+            const config = {};
+            const inputs = document.querySelectorAll('.generator-section input[type="text"], .generator-section textarea, .generator-section input[type="checkbox"]');
+            inputs.forEach(input => {
+                // Gebruik een data-attribuut of de id om de config key te bepalen
+                // Vereenvoudigd: we gebruiken de id direct (gen-opt-eten -> optEten)
+                 let key = input.id.replace('gen-', '').replace(/-([a-z])/g, (g) => g[1].toUpperCase()); // bv. gen-page-title -> pageTitle
+                 if (input.type === 'checkbox') {
+                     config[key] = input.checked;
+                 } else {
+                     config[key] = input.value;
+                 }
+            });
+            // Correctie voor standaard aantal label als eten optie uit staat
+            if (!config.optEten) {
+                config.labelAantalAct = config.labelAantal; // Gebruik standaard label
+            } else if (!config.labelAantalAct) {
+                 config.labelAantalAct = config.labelAantal; // Fallback als leeg
+            }
+
+
+            console.log("Configuratie gelezen:", config);
+
+            // --- 2. Basis HTML Template String ---
+            let outputHTML = `<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${config.pageTitle || 'Inschrijfformulier'}</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="Description" content="Inschrijfformulier voor DLML activiteit: ${config.activityTitle || ''}">
+    <meta name="Author" content="Diabetes Liga Midden-Limburg">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <!-- Let op: Zorg dat style.css en script.js in dezelfde map staan als deze HTML, of pas paden aan! -->
+</head>
+<body>
+    <div id="content">
+        <div id="top">
+            <div>${config.inschrijvingType || ''}</div>
+            <div>${config.activityTitle || ''}</div>
+            <div> </div>
+            <div>${config.activityDate || ''}</div>
+            <div>${config.activityLocation || ''}</div>
+            <div> </div>
+            <div>${config.activityTime || ''}</div>
+            <div>${config.activityAddress || ''}</div>
+            <div> </div>
+        </div>
+        <div id="filenaam" style="display:none;">${config.filename || ''}</div>
+        <div id="checkafzender" style="display:none;">${config.checkstring || ''}</div>
+
+        <form id="myForm" action="#" method="post" accept-charset="utf-8">
+
+            <label class="lnfd" for="naam">
+                ${config.labelNaam || 'Naam (*)'}
+                <span> gelieve uw naam in te vullen! </span><br>
+                <input type="text" id="naam" name="naam" size="30" placeholder="Naam">
+            </label>
+            <label class="lnfd" for="voornaam">
+                ${config.labelVoornaam || 'Voornaam'}<br>
+                <input type="text" id="voornaam" name="voornaam" size="25" placeholder="Voornaam">
+            </label>
+            <label for="email">
+                 ${config.labelEmail || 'E-mail (**)'}
+                 <span> gelieve uw e-mail te noteren! </span><br>
+                 <input class="lnfd" type="text" id="email" name="email" size="40" placeholder="@emaildomein.be">
+            </label>
+            <label for="tel">
+                 ${config.labelTel || 'Tel/GSM'}<br>
+                 <input class="lnfd" type="text" id="tel" name="tel" size="25" placeholder="Telefoonnummer">
+            </label>
+
+            <!-- Dynamische Secties komen hier -->
+            %%DYNAMIC_SECTIONS%%
+
+             <!-- Standaard Aantal of Activiteit Aantal veld -->
+             <!-- (Wordt alleen getoond als Moederdag NIET is gekozen, want die heeft eigen aantallen) -->
+             ${!config.optMoederdag ? `
+             <label for="aantal">
+                  ${config.labelAantalAct || 'Aantal deelnemers (*)'}
+                  <span> gelieve het aantal deelnemers te vermelden! </span><br>
+                  <input class="lnfd" type="text" id="aantal" name="aantal" size="8" value="" placeholder="Aantal">
+                  ${config.optEten && config.textAantalAct ? `<span style="display: block; font-weight: normal; font-size: 14px; margin-top: -10px; margin-bottom: 10px;">${config.textAantalAct.replace(/\n/g, '<br>')}</span>` : ''}
+             </label>
+             ` : ''}
+
+
+             <!-- Optionele Etentje Input (alleen als optEten aan staat) -->
+             ${config.optEten ? `
+             <label for="eten_input">
+                 ${config.labelEten || 'Extra optie'}<br>
+                 <input class="lnfd" type="text" id="eten_input" name="eten_details" size="30" placeholder="Aantal of details">
+                 ${config.textEten ? `<span style="display: block; font-weight: normal; font-size: 14px; margin-top: -10px; margin-bottom: 10px;">${config.textEten.replace(/\n/g, '<br>')}</span>` : ''}
+             </label>
+             ` : ''}
+
+            <!-- Attest Checkbox (alleen als optAttest aan staat) -->
+            ${config.optAttest ? `
+            <label class="lnfd" for="attest">
+                <input id="attest" name="attest" type="checkbox" value="ja"> ${config.textAttest || 'Wenst een deelname-attest'}
+            </label>
+            ` : ''}
+
+            <label for="opmerkingen">${config.labelOpmerkingen || 'Opmerkingen'}</label>
+            <textarea class="lnfd" id="opmerkingen" name="opmerkingen" cols="35" rows="6"></textarea>
+
+            <button class="lnfd" id="btnSubmit" type="submit">Inschrijven</button>
+            <button id="fakeBtnSubmit" type="button">Inschrijven</button>
+            <div class="lnfd" id="txtFakeBtnSubmit">${config.textFakeButton || 'Gelieve alle verplichte velden in te vullen'}</div>
+            <div id="txtVerplicht">
+                ${config.textVerplicht || '(*) velden zijn verplicht'}<br>
+                 ${config.optFysiekDigitaal ? (config.textEmailVerplicht || '(**) verplicht voor digitale deelname') + '<br>' : ''}
+            </div>
+            <div style="width:100%; height:1px; margin-bottom: 0;"> </div>
+            <img id="logoDL" alt="Logo DLML" src="../site/image/DLML_ZBT.png"> <!-- Pas pad aan indien nodig! -->
+            <div id="containerBevestiging">
+                <div id="bevestiging">
+                    <div id="bevestigingTitel"> </div>
+                    <div id="bevestigingMsg">Inschrijving wordt verwerkt...</div>
+                    <div id="btnOK">Ok</div>
+                </div>
+            </div>
+        </form>
+        <div style="width:100%; height:25px;"> </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="script.js"></script> <!-- Zorg dat dit script correct werkt met alle opties! -->
+</body>
+</html>`;
+
+            // --- 3. Voeg Dynamische Secties in ---
+            let dynamicHTML = '';
+
+            if (config.optFysiekDigitaal) {
+                 console.log("Fysiek/Digitaal sectie toevoegen...");
+                 const createListItems = (text) => text.split('\n').map(line => line.trim()).filter(line => line).map(line => `<div>${line.startsWith('•') ? '' : '• '}${line.replace(/^•\s*/, '')}</div>`).join('\n');
+                 dynamicHTML += `
+            <div id="deelname">
+                <div>Deelname</div>
+                 <div>
+                    <input class="inln" id="fysiek" type="radio" value="fysiek" name="keuzeDeelname" checked="checked">
+                    <label class="inln" for="fysiek">${config.labelFysiek || 'Fysiek'}</label>
+                 </div>
+                 <div>
+                    <input class="inln" id="digitaal" type="radio" value="digitaal" name="keuzeDeelname">
+                    <label class="inln" for="digitaal">${config.labelDigitaal || 'Digitaal'}</label>
+                </div>
+                <div class="info-header">Fysieke deelname:</div>
+                ${createListItems(config.textFysiek || '')}
+                <div class="info-header">Digitale deelname:</div>
+                 ${createListItems(config.textDigitaal || '')}
+            </div>`;
+            }
+
+            if (config.optMoederdag) {
+                 console.log("Moederdag sectie toevoegen...");
+                 // Voeg HTML uit textarea in, vóór het standaard 'Aantal' veld
+                 dynamicHTML += `\n${config.htmlMoederdag || '<!-- Moederdag HTML ontbreekt -->'}\n`;
+            }
+
+            outputHTML = outputHTML.replace('%%DYNAMIC_SECTIONS%%', dynamicHTML);
+
+            // --- 4. Zet de volledige HTML in de textarea ---
+            document.getElementById('output-code').value = outputHTML;
+            console.log("HTML generatie voltooid.");
+
+            // --- 5. Update Preview ---
+            const previewArea = document.getElementById('preview-area');
+             try {
+                 previewArea.innerHTML = '<iframe id="preview-iframe" style="width: 100%; height: 600px; border: none;" title="Formulier Preview"></iframe>'; // Meer hoogte
+                 const iframe = document.getElementById('preview-iframe');
+                 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                 iframeDoc.open();
+                 // Probeer CSS relatief aan de generator te laden
+                 const cssLink = `<link rel="stylesheet" href="style.css?t=${Date.now()}">`; // Forceer reload CSS
+                 const fontLink = "<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>";
+                 iframeDoc.write(`<html><head>${cssLink}${fontLink}</head><body>${outputHTML}</body></html>`); // Schrijf volledige HTML incl CSS link
+                 iframeDoc.close();
+                 console.log("Preview bijgewerkt.");
+            } catch (e) {
+                 console.error("Preview bijwerken mislukt:", e);
+                 previewArea.innerHTML = '<p><i>Preview kon niet worden geladen. Controleer browser console (F12) voor fouten. Kopieer de code en open deze lokaal.</i></p>';
+            }
+
+        }); // Einde btn-generate listener
+
+        // Kopieer knop
         document.getElementById('btn-copy').addEventListener('click', function() {
             const outputCode = document.getElementById('output-code');
+             if (!outputCode.value) {
+                 alert("Genereer eerst de code!");
+                 return;
+             }
             outputCode.select();
-            document.execCommand('copy');
-            alert("Code gekopieerd naar klembord!");
+            try {
+                document.execCommand('copy');
+                alert("Code gekopieerd naar klembord!");
+            } catch (err) {
+                alert("Kon de code niet automatisch kopiëren. Selecteer handmatig.");
+            }
+            // Deselecteer de tekst
+             if (window.getSelection) {window.getSelection().removeAllRanges();}
+             else if (document.selection) {document.selection.empty();}
+
         });
 
+        // Download knop
          document.getElementById('btn-download').addEventListener('click', function() {
             const code = document.getElementById('output-code').value;
             if (!code) {
@@ -226,13 +421,15 @@
             const blob = new Blob([code], { type: 'text/html' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            // Gebruik een generieke naam of haal uit config veld
-            link.download = document.getElementById('gen-filename')?.value.replace(/\s+/g, '_') + '_index.html' || 'index.html';
+            const filenameBase = document.getElementById('gen-filename')?.value?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'formulier';
+            link.download = filenameBase + '_index.html';
+            document.body.appendChild(link); // Nodig voor Firefox
             link.click();
+            document.body.removeChild(link); // Ruim op
             URL.revokeObjectURL(link.href);
          });
 
-        // Initialiseer sub-opties bij laden (verberg ze als checkbox uit staat)
+        // Initialiseer sub-opties bij laden
         document.addEventListener('DOMContentLoaded', () => {
             toggleSubOptions('sub-fysiek-digitaal', document.getElementById('gen-opt-fysiek-digitaal').checked);
             toggleSubOptions('sub-eten', document.getElementById('gen-opt-eten').checked);
