@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DLML Formulier Generator</title>
     <style>
-        /* Simpele styling voor de generator zelf */
+        /* Styling blijft hetzelfde als vorige versie */
         body { font-family: sans-serif; line-height: 1.5; padding: 20px; background-color: #f4f4f4; }
         .generator-section { background-color: #fff; border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; }
         h1, h2, h3 { margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #333; }
@@ -34,28 +34,20 @@
         <h2>1. Algemene Activiteit Informatie</h2>
         <label for="gen-page-title">Paginatitel:</label>
         <input type="text" id="gen-page-title" value="Inschrijving [Activiteit Naam]">
-
         <label for="gen-inschrijving-type">Type (bv. Inschrijving infosessie):</label>
         <input type="text" id="gen-inschrijving-type" value="Inschrijving infosessie">
-
         <label for="gen-activity-title">Titel Activiteit (Hoofdletters):</label>
         <input type="text" id="gen-activity-title" value="VOORBEELD ACTIVITEIT">
-
         <label for="gen-activity-date">Datum:</label>
         <input type="text" id="gen-activity-date" value="Donderdag 1 januari 2025">
-
         <label for="gen-activity-location">Locatie:</label>
         <input type="text" id="gen-activity-location" value="Locatie Voorbeeld">
-
         <label for="gen-activity-time">Tijd:</label>
         <input type="text" id="gen-activity-time" value="20.00 u - 22.00 u">
-
         <label for="gen-activity-address">Adres:</label>
         <input type="text" id="gen-activity-address" value="Straatnaam 1, 9999 Gemeente">
-
         <label for="gen-filename">Interne bestandsnaam (voor data):</label>
         <input type="text" id="gen-filename" value="lijst_voorbeeld">
-
         <label for="gen-checkstring">Interne checkstring:</label>
         <input type="text" id="gen-checkstring" value="check_voorbeeld_01012025">
     </div>
@@ -81,7 +73,6 @@
     <!-- Sectie 3: Formulier Opties/Secties -->
     <div class="generator-section">
         <h2>3. Optionele Formulier Secties</h2>
-
         <!-- Optie 1: Fysiek/Digitaal -->
         <div class="checkbox-option">
             <input type="checkbox" id="gen-opt-fysiek-digitaal" onchange="toggleSubOptions('sub-fysiek-digitaal', this.checked)">
@@ -102,7 +93,6 @@
    ontvangt u verdere praktische informatie.</textarea>
             </div>
         </div>
-
         <!-- Optie 2: Activiteit Aantal & Eten -->
         <div class="checkbox-option">
              <input type="checkbox" id="gen-opt-eten" onchange="toggleSubOptions('sub-eten', this.checked)">
@@ -119,7 +109,6 @@
                  <textarea id="gen-text-eten">facultatief, ter plaatse te betalen</textarea>
              </div>
         </div>
-
          <!-- Optie 3: Moederdag (Vereenvoudigd - HTML invoegen) -->
          <div class="checkbox-option">
              <input type="checkbox" id="gen-opt-moederdag" onchange="toggleSubOptions('sub-moederdag', this.checked)">
@@ -148,7 +137,6 @@
                  <small>Plaats de volledige HTML voor dit blok hier. Zorg dat inputvelden unieke `id` en `name` attributen hebben! Het script plaatst dit blok vóór het standaard 'Aantal deelnemers' veld.</small>
              </div>
          </div>
-
         <!-- Optie 4: Attest Checkbox -->
         <div class="checkbox-option">
             <input type="checkbox" id="gen-opt-attest" checked onchange="toggleSubOptions('sub-attest', this.checked)">
@@ -158,7 +146,6 @@
                  <input type="text" id="gen-text-attest" value="Wenst een deelname-attest">
              </div>
         </div>
-
     </div>
 
      <!-- Sectie 4: Teksten Onderaan -->
@@ -172,7 +159,6 @@
          <label for="gen-text-fake-button">Tekst onder grijze knop:</label>
         <input type="text" id="gen-text-fake-button" value="Gelieve alle verplichte velden in te vullen">
     </div>
-
 
     <!-- Sectie 5: Preview & Genereren -->
     <div class="generator-section">
@@ -191,7 +177,7 @@
     </div>
 
     <script>
-        // Simpele functie om sub-opties te tonen/verbergen
+        // Functie om sub-opties te tonen/verbergen
         function toggleSubOptions(divId, show) {
             const subOptionsDiv = document.getElementById(divId);
             if (subOptionsDiv) {
@@ -202,32 +188,72 @@
         // --- Generatie Logica ---
         document.getElementById('btn-generate').addEventListener('click', function() {
             console.log("Start generatie...");
+            try { // Voeg een try...catch toe om fouten te vangen
 
-            // --- 1. Lees alle waarden uit de generator velden ---
-            const config = {};
-            const inputs = document.querySelectorAll('.generator-section input[type="text"], .generator-section textarea, .generator-section input[type="checkbox"]');
-            inputs.forEach(input => {
-                // Gebruik een data-attribuut of de id om de config key te bepalen
-                // Vereenvoudigd: we gebruiken de id direct (gen-opt-eten -> optEten)
-                 let key = input.id.replace('gen-', '').replace(/-([a-z])/g, (g) => g[1].toUpperCase()); // bv. gen-page-title -> pageTitle
-                 if (input.type === 'checkbox') {
-                     config[key] = input.checked;
-                 } else {
-                     config[key] = input.value;
-                 }
-            });
-            // Correctie voor standaard aantal label als eten optie uit staat
-            if (!config.optEten) {
-                config.labelAantalAct = config.labelAantal; // Gebruik standaard label
-            } else if (!config.labelAantalAct) {
-                 config.labelAantalAct = config.labelAantal; // Fallback als leeg
-            }
+                // --- 1. Lees Checkbox statussen EERST ---
+                const optFysiekDigitaalChecked = document.getElementById('gen-opt-fysiek-digitaal').checked;
+                const optEtenChecked = document.getElementById('gen-opt-eten').checked;
+                const optMoederdagChecked = document.getElementById('gen-opt-moederdag').checked;
+                const optAttestChecked = document.getElementById('gen-opt-attest').checked;
 
+                // --- 2. Lees alle andere waarden en bouw config object ---
+                const config = {
+                    // Sectie 1
+                    pageTitle: document.getElementById('gen-page-title').value,
+                    inschrijvingType: document.getElementById('gen-inschrijving-type').value,
+                    activityTitle: document.getElementById('gen-activity-title').value,
+                    activityDate: document.getElementById('gen-activity-date').value,
+                    activityLocation: document.getElementById('gen-activity-location').value,
+                    activityTime: document.getElementById('gen-activity-time').value,
+                    activityAddress: document.getElementById('gen-activity-address').value,
+                    filename: document.getElementById('gen-filename').value,
+                    checkstring: document.getElementById('gen-checkstring').value,
 
-            console.log("Configuratie gelezen:", config);
+                    // Sectie 2
+                    labelNaam: document.getElementById('gen-label-naam').value,
+                    labelVoornaam: document.getElementById('gen-label-voornaam').value,
+                    labelEmail: document.getElementById('gen-label-email').value,
+                    labelTel: document.getElementById('gen-label-tel').value,
+                    labelAantal: document.getElementById('gen-label-aantal').value, // Standaard label aantal
+                    labelOpmerkingen: document.getElementById('gen-label-opmerkingen').value,
 
-            // --- 2. Basis HTML Template String ---
-            let outputHTML = `<!DOCTYPE html>
+                    // Sectie 3 Checkboxes (nu direct uit variabele)
+                    optFysiekDigitaal: optFysiekDigitaalChecked,
+                    optEten: optEtenChecked,
+                    optMoederdag: optMoederdagChecked,
+                    optAttest: optAttestChecked,
+
+                    // Sectie 3 Sub-opties (lees alleen als bijbehorende checkbox aan staat)
+                    labelFysiek: optFysiekDigitaalChecked ? document.getElementById('gen-label-fysiek').value : '',
+                    labelDigitaal: optFysiekDigitaalChecked ? document.getElementById('gen-label-digitaal').value : '',
+                    textFysiek: optFysiekDigitaalChecked ? document.getElementById('gen-text-fysiek').value : '',
+                    textDigitaal: optFysiekDigitaalChecked ? document.getElementById('gen-text-digitaal').value : '',
+
+                    labelAantalAct: optEtenChecked ? document.getElementById('gen-label-aantal-act').value : '',
+                    textAantalAct: optEtenChecked ? document.getElementById('gen-text-aantal-act').value : '',
+                    labelEten: optEtenChecked ? document.getElementById('gen-label-eten').value : '',
+                    textEten: optEtenChecked ? document.getElementById('gen-text-eten').value : '',
+
+                    htmlMoederdag: optMoederdagChecked ? document.getElementById('gen-html-moederdag').value : '',
+
+                    textAttest: optAttestChecked ? document.getElementById('gen-text-attest').value : '',
+
+                    // Sectie 4
+                    textVerplicht: document.getElementById('gen-text-verplicht').value,
+                    textEmailVerplicht: document.getElementById('gen-text-email-verplicht').value,
+                    textFakeButton: document.getElementById('gen-text-fake-button').value
+                };
+
+                // Fallback voor Aantal Label als Eten optie aanstaat maar label leeg is
+                if (config.optEten && !config.labelAantalAct) {
+                    config.labelAantalAct = config.labelAantal; // Gebruik standaard label
+                }
+
+                console.log("Configuratie gelezen:", config);
+
+                // --- 3. Basis HTML Template String ---
+                // (De template string zelf blijft hetzelfde als in het vorige antwoord)
+                let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
     <meta charset="utf-8">
@@ -281,16 +307,14 @@
             %%DYNAMIC_SECTIONS%%
 
              <!-- Standaard Aantal of Activiteit Aantal veld -->
-             <!-- (Wordt alleen getoond als Moederdag NIET is gekozen, want die heeft eigen aantallen) -->
              ${!config.optMoederdag ? `
              <label for="aantal">
-                  ${config.labelAantalAct || 'Aantal deelnemers (*)'}
+                  ${config.optEten ? (config.labelAantalAct || config.labelAantal) : (config.labelAantal || 'Aantal deelnemers (*)')}
                   <span> gelieve het aantal deelnemers te vermelden! </span><br>
                   <input class="lnfd" type="text" id="aantal" name="aantal" size="8" value="" placeholder="Aantal">
                   ${config.optEten && config.textAantalAct ? `<span style="display: block; font-weight: normal; font-size: 14px; margin-top: -10px; margin-bottom: 10px;">${config.textAantalAct.replace(/\n/g, '<br>')}</span>` : ''}
              </label>
              ` : ''}
-
 
              <!-- Optionele Etentje Input (alleen als optEten aan staat) -->
              ${config.optEten ? `
@@ -335,58 +359,59 @@
 </body>
 </html>`;
 
-            // --- 3. Voeg Dynamische Secties in ---
-            let dynamicHTML = '';
+                // --- 4. Voeg Dynamische Secties in ---
+                let dynamicHTML = '';
+                const createListItems = (text) => text.split('\n').map(line => line.trim()).filter(line => line).map(line => `<div>${line.startsWith('•') ? '' : '• '}${line.replace(/^•\s*/, '')}</div>`).join('\n');
 
-            if (config.optFysiekDigitaal) {
-                 console.log("Fysiek/Digitaal sectie toevoegen...");
-                 const createListItems = (text) => text.split('\n').map(line => line.trim()).filter(line => line).map(line => `<div>${line.startsWith('•') ? '' : '• '}${line.replace(/^•\s*/, '')}</div>`).join('\n');
-                 dynamicHTML += `
-            <div id="deelname">
-                <div>Deelname</div>
-                 <div>
-                    <input class="inln" id="fysiek" type="radio" value="fysiek" name="keuzeDeelname" checked="checked">
-                    <label class="inln" for="fysiek">${config.labelFysiek || 'Fysiek'}</label>
-                 </div>
-                 <div>
-                    <input class="inln" id="digitaal" type="radio" value="digitaal" name="keuzeDeelname">
-                    <label class="inln" for="digitaal">${config.labelDigitaal || 'Digitaal'}</label>
-                </div>
-                <div class="info-header">Fysieke deelname:</div>
-                ${createListItems(config.textFysiek || '')}
-                <div class="info-header">Digitale deelname:</div>
-                 ${createListItems(config.textDigitaal || '')}
-            </div>`;
-            }
+                if (config.optFysiekDigitaal) {
+                    console.log("Fysiek/Digitaal sectie toevoegen...");
+                    dynamicHTML += `
+                <div id="deelname">
+                    <div>Deelname</div>
+                     <div>
+                        <input class="inln" id="fysiek" type="radio" value="fysiek" name="keuzeDeelname" checked="checked">
+                        <label class="inln" for="fysiek">${config.labelFysiek || 'Fysiek'}</label>
+                     </div>
+                     <div>
+                        <input class="inln" id="digitaal" type="radio" value="digitaal" name="keuzeDeelname">
+                        <label class="inln" for="digitaal">${config.labelDigitaal || 'Digitaal'}</label>
+                    </div>
+                    <div class="info-header">Fysieke deelname:</div>
+                    ${createListItems(config.textFysiek || '')}
+                    <div class="info-header">Digitale deelname:</div>
+                     ${createListItems(config.textDigitaal || '')}
+                </div>`;
+                }
 
-            if (config.optMoederdag) {
-                 console.log("Moederdag sectie toevoegen...");
-                 // Voeg HTML uit textarea in, vóór het standaard 'Aantal' veld
-                 dynamicHTML += `\n${config.htmlMoederdag || '<!-- Moederdag HTML ontbreekt -->'}\n`;
-            }
+                if (config.optMoederdag) {
+                    console.log("Moederdag sectie toevoegen...");
+                    dynamicHTML += `\n${config.htmlMoederdag || '<!-- Moederdag HTML ontbreekt -->'}\n`;
+                }
 
-            outputHTML = outputHTML.replace('%%DYNAMIC_SECTIONS%%', dynamicHTML);
+                outputHTML = outputHTML.replace('%%DYNAMIC_SECTIONS%%', dynamicHTML);
 
-            // --- 4. Zet de volledige HTML in de textarea ---
-            document.getElementById('output-code').value = outputHTML;
-            console.log("HTML generatie voltooid.");
+                // --- 5. Zet de volledige HTML in de textarea ---
+                document.getElementById('output-code').value = outputHTML;
+                console.log("HTML generatie voltooid.");
 
-            // --- 5. Update Preview ---
-            const previewArea = document.getElementById('preview-area');
-             try {
-                 previewArea.innerHTML = '<iframe id="preview-iframe" style="width: 100%; height: 600px; border: none;" title="Formulier Preview"></iframe>'; // Meer hoogte
-                 const iframe = document.getElementById('preview-iframe');
-                 const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                 iframeDoc.open();
-                 // Probeer CSS relatief aan de generator te laden
-                 const cssLink = `<link rel="stylesheet" href="style.css?t=${Date.now()}">`; // Forceer reload CSS
-                 const fontLink = "<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>";
-                 iframeDoc.write(`<html><head>${cssLink}${fontLink}</head><body>${outputHTML}</body></html>`); // Schrijf volledige HTML incl CSS link
-                 iframeDoc.close();
-                 console.log("Preview bijgewerkt.");
-            } catch (e) {
-                 console.error("Preview bijwerken mislukt:", e);
-                 previewArea.innerHTML = '<p><i>Preview kon niet worden geladen. Controleer browser console (F12) voor fouten. Kopieer de code en open deze lokaal.</i></p>';
+                // --- 6. Update Preview ---
+                const previewArea = document.getElementById('preview-area');
+                previewArea.innerHTML = '<iframe id="preview-iframe" style="width: 100%; height: 600px; border: none;" title="Formulier Preview"></iframe>';
+                const iframe = document.getElementById('preview-iframe');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                const cssLink = `<link rel="stylesheet" href="style.css?t=${Date.now()}">`; // Forceer reload CSS
+                const fontLink = "<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>";
+                // Belangrijk: script.js NIET laden in de preview iframe, want die is bedoeld voor het *echte* formulier
+                iframeDoc.write(`<html><head><meta charset="UTF-8">${cssLink}${fontLink}</head><body>${outputHTML.replace('<script src="script.js"></script>','')}</body></html>`);
+                iframeDoc.close();
+                console.log("Preview bijgewerkt.");
+
+            } catch (error) {
+                console.error("Fout tijdens genereren:", error);
+                alert("Er is een fout opgetreden tijdens het genereren van de code. Controleer de console (F12) voor details.");
+                document.getElementById('output-code').value = `// Fout tijdens genereren:\n// ${error}`;
+                document.getElementById('preview-area').innerHTML = '<p><i>Genereren mislukt. Controleer de console (F12).</i></p>';
             }
 
         }); // Einde btn-generate listener
@@ -394,47 +419,49 @@
         // Kopieer knop
         document.getElementById('btn-copy').addEventListener('click', function() {
             const outputCode = document.getElementById('output-code');
-             if (!outputCode.value) {
-                 alert("Genereer eerst de code!");
+             if (!outputCode.value || outputCode.value.startsWith('// Fout')) {
+                 alert("Genereer eerst de code succesvol!");
                  return;
              }
             outputCode.select();
             try {
-                document.execCommand('copy');
-                alert("Code gekopieerd naar klembord!");
+                const successful = document.execCommand('copy');
+                alert(successful ? "Code gekopieerd!" : "Kon niet automatisch kopiëren.");
             } catch (err) {
-                alert("Kon de code niet automatisch kopiëren. Selecteer handmatig.");
+                alert("Kon niet automatisch kopiëren.");
             }
-            // Deselecteer de tekst
              if (window.getSelection) {window.getSelection().removeAllRanges();}
              else if (document.selection) {document.selection.empty();}
-
         });
 
         // Download knop
          document.getElementById('btn-download').addEventListener('click', function() {
             const code = document.getElementById('output-code').value;
-            if (!code) {
-                alert("Genereer eerst de code!");
+            if (!code || code.startsWith('// Fout')) {
+                alert("Genereer eerst de code succesvol!");
                 return;
             }
-            const blob = new Blob([code], { type: 'text/html' });
+            const blob = new Blob([code], { type: 'text/html;charset=utf-8' }); // Zet charset
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
             const filenameBase = document.getElementById('gen-filename')?.value?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'formulier';
             link.download = filenameBase + '_index.html';
-            document.body.appendChild(link); // Nodig voor Firefox
+            document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link); // Ruim op
+            document.body.removeChild(link);
             URL.revokeObjectURL(link.href);
          });
 
         // Initialiseer sub-opties bij laden
         document.addEventListener('DOMContentLoaded', () => {
-            toggleSubOptions('sub-fysiek-digitaal', document.getElementById('gen-opt-fysiek-digitaal').checked);
-            toggleSubOptions('sub-eten', document.getElementById('gen-opt-eten').checked);
-            toggleSubOptions('sub-moederdag', document.getElementById('gen-opt-moederdag').checked);
-            toggleSubOptions('sub-attest', document.getElementById('gen-opt-attest').checked);
+            try { // Voeg try-catch toe voor robuustheid
+                toggleSubOptions('sub-fysiek-digitaal', document.getElementById('gen-opt-fysiek-digitaal').checked);
+                toggleSubOptions('sub-eten', document.getElementById('gen-opt-eten').checked);
+                toggleSubOptions('sub-moederdag', document.getElementById('gen-opt-moederdag').checked);
+                toggleSubOptions('sub-attest', document.getElementById('gen-opt-attest').checked);
+            } catch (error) {
+                console.error("Fout bij initialiseren sub-opties:", error);
+            }
         });
 
     </script>
