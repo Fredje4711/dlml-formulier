@@ -29,28 +29,45 @@
 
     <h1>DLML Formulier Generator</h1>
 
-    <!-- Secties 1 t/m 4 (HTML structuur onveranderd) -->
+    <!-- Sectie 1: Aangepaste Header Velden -->
     <div class="generator-section">
-        <h2>1. Algemene Activiteit Informatie</h2>
-        <label for="gen-page-title">Paginatitel:</label>
+        <h2>1. Algemene Activiteit Informatie (Header)</h2>
+
+        <label for="gen-inschrijving-titel">Hoofdtitel (Standaard "Inschrijving"):</label>
+        <input type="text" id="gen-inschrijving-titel" value="Inschrijving">
+
+        <label for="gen-subtype-titel">Subtype Titel (bv. "infosessie", laat leeg indien niet van toepassing):</label>
+        <input type="text" id="gen-subtype-titel" value="infosessie">
+        <small>Wordt naast de hoofdtitel getoond.</small>
+
+        <label for="gen-activity-naam">Naam Activiteit (bv. "NIEUWE TECHNIEKEN - NIEUWE MEDICATIE"):</label>
+        <input type="text" id="gen-activity-naam" value="NIEUWE TECHNIEKEN - NIEUWE MEDICATIE">
+        <small>Komt onder de hoofd/subtype titels.</small>
+
+        <label for="gen-activity-datum">Datum (bv. "Donderdag 27 november 2025"):</label>
+        <input type="text" id="gen-activity-datum" value="Donderdag 27 november 2025">
+
+        <label for="gen-activity-uur">Uur (bv. "20.00 u - 22.00 u"):</label>
+        <input type="text" id="gen-activity-uur" value="20.00 u - 22.00 u">
+
+        <label for="gen-activity-plaats">Plaats (bv. "JZ aula Salvator Ziekenhuis"):</label>
+        <input type="text" id="gen-activity-plaats" value="JZ aula Salvator Ziekenhuis">
+
+        <label for="gen-activity-adres">Adres (bv. "Salvatorstraat 20, 3500 Hasselt"):</label>
+        <input type="text" id="gen-activity-adres" value="Salvatorstraat 20, 3500 Hasselt">
+
+        <label for="gen-page-title">Paginatitel (voor browser tab):</label>
         <input type="text" id="gen-page-title" value="Inschrijving [Activiteit Naam]">
-        <label for="gen-inschrijving-type">Type (bv. Inschrijving infosessie):</label>
-        <input type="text" id="gen-inschrijving-type" value="Inschrijving infosessie">
-        <label for="gen-activity-title">Titel Activiteit (Hoofdletters):</label>
-        <input type="text" id="gen-activity-title" value="VOORBEELD ACTIVITEIT">
-        <label for="gen-activity-date">Datum:</label>
-        <input type="text" id="gen-activity-date" value="Donderdag 1 januari 2025">
-        <label for="gen-activity-location">Locatie:</label>
-        <input type="text" id="gen-activity-location" value="Locatie Voorbeeld">
-        <label for="gen-activity-time">Tijd:</label>
-        <input type="text" id="gen-activity-time" value="20.00 u - 22.00 u">
-        <label for="gen-activity-address">Adres:</label>
-        <input type="text" id="gen-activity-address" value="Straatnaam 1, 9999 Gemeente">
+        <small>Pas "[Activiteit Naam]" aan.</small>
+
         <label for="gen-filename">Interne bestandsnaam (voor data):</label>
-        <input type="text" id="gen-filename" value="lijst_voorbeeld">
+        <input type="text" id="gen-filename" value="lijst_activiteit">
+
         <label for="gen-checkstring">Interne checkstring:</label>
-        <input type="text" id="gen-checkstring" value="check_voorbeeld_01012025">
+        <input type="text" id="gen-checkstring" value="check_activiteit_ddmmyyyy">
     </div>
+
+    <!-- Secties 2, 3, 4, 5 (HTML structuur onveranderd) -->
     <div class="generator-section">
         <h2>2. Labels Basisvelden (Pas aan indien nodig)</h2>
         <label for="gen-label-naam">Label Naam:</label>

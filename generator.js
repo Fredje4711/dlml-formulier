@@ -42,38 +42,40 @@ document.addEventListener('DOMContentLoaded', () => {
      const generateButton = document.getElementById('btn-generate');
      if (generateButton) {
          generateButton.addEventListener('click', function() { // START generate listener
-             alert("Knop Geklikt - Start"); // Testpunt 0
-             console.log("!!! Generate knop listener gestart !!!");
+             console.log("Generator Script: Start generatie...");
              try { // START try block
-
-                 // --- Testpunt 1: Start config lezen ---
-                 console.log("Stap 1: Start config lezen...");
+                 // --- 1. Lees Checkbox statussen EERST ---
                  const optFysiekDigitaalChecked = document.getElementById('gen-opt-fysiek-digitaal').checked;
                  const optEtenChecked = document.getElementById('gen-opt-eten').checked;
                  const optMoederdagChecked = document.getElementById('gen-opt-moederdag').checked;
                  const optAttestChecked = document.getElementById('gen-opt-attest').checked;
-                 // alert("Stap 1a: Checkboxes gelezen"); // Optioneel
 
+                 // --- 2. Lees alle andere waarden en bouw config object ---
                  const config = {
-                    pageTitle: document.getElementById('gen-page-title').value,
-                    inschrijvingType: document.getElementById('gen-inschrijving-type').value,
-                    activityTitle: document.getElementById('gen-activity-title').value,
-                    activityDate: document.getElementById('gen-activity-date').value,
-                    activityLocation: document.getElementById('gen-activity-location').value,
-                    activityTime: document.getElementById('gen-activity-time').value,
-                    activityAddress: document.getElementById('gen-activity-address').value,
+                    // Sectie 1 (AANGEPAST)
+                    inschrijvingTitel: document.getElementById('gen-inschrijving-titel').value,
+                    subtypeTitel: document.getElementById('gen-subtype-titel').value,
+                    activityNaam: document.getElementById('gen-activity-naam').value,
+                    activityDatum: document.getElementById('gen-activity-datum').value, // Nieuwe ID
+                    activityUur: document.getElementById('gen-activity-uur').value,     // Nieuwe ID
+                    activityPlaats: document.getElementById('gen-activity-plaats').value, // Nieuwe ID
+                    activityAdres: document.getElementById('gen-activity-adres').value, // Nieuwe ID
+                    pageTitle: document.getElementById('gen-page-title').value, // Behoud deze
                     filename: document.getElementById('gen-filename').value,
                     checkstring: document.getElementById('gen-checkstring').value,
+                    // Sectie 2
                     labelNaam: document.getElementById('gen-label-naam').value,
                     labelVoornaam: document.getElementById('gen-label-voornaam').value,
                     labelEmail: document.getElementById('gen-label-email').value,
                     labelTel: document.getElementById('gen-label-tel').value,
                     labelAantal: document.getElementById('gen-label-aantal').value,
                     labelOpmerkingen: document.getElementById('gen-label-opmerkingen').value,
+                    // Sectie 3 Checkboxes
                     optFysiekDigitaal: optFysiekDigitaalChecked,
                     optEten: optEtenChecked,
                     optMoederdag: optMoederdagChecked,
                     optAttest: optAttestChecked,
+                    // Sectie 3 Sub-opties
                     labelFysiek: optFysiekDigitaalChecked ? document.getElementById('gen-label-fysiek').value : '',
                     labelDigitaal: optFysiekDigitaalChecked ? document.getElementById('gen-label-digitaal').value : '',
                     textFysiek: optFysiekDigitaalChecked ? document.getElementById('gen-text-fysiek').value : '',
@@ -84,22 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     textEten: optEtenChecked ? document.getElementById('gen-text-eten').value : '',
                     htmlMoederdag: optMoederdagChecked ? document.getElementById('gen-html-moederdag').value : '',
                     textAttest: optAttestChecked ? document.getElementById('gen-text-attest').value : '',
+                    // Sectie 4
                     textVerplicht: document.getElementById('gen-text-verplicht').value,
                     textEmailVerplicht: document.getElementById('gen-text-email-verplicht').value,
                     textFakeButton: document.getElementById('gen-text-fake-button').value
                  };
                  if (config.optEten && !config.labelAantalAct) { config.labelAantalAct = config.labelAantal; }
-                 // alert("Stap 1b: Config object gemaakt"); // Optioneel
+                 console.log("Generator Script: Configuratie gelezen.");
 
-                 // --- Testpunt 2: Config gelezen ---
-                 console.log("Stap 2: Config succesvol gelezen.");
-                 // console.log(config); // Optioneel
-
-                 // --- Testpunt 3: Start HTML Template ---
-                 console.log("Stap 3: Start opbouw HTML template string...");
-                 // ==================================================
-                 // === VOLLEDIGE outputHTML TEMPLATE STRING START ===
-                 // ==================================================
+                 // --- 3. Basis HTML Template String (met aangepaste header en logo pad) ---
                  let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -108,22 +103,64 @@ document.addEventListener('DOMContentLoaded', () => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${config.pageTitle || 'Inschrijfformulier'}</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="Description" content="Inschrijfformulier voor DLML activiteit: ${config.activityTitle || ''}">
+    <meta name="Description" content="Inschrijfformulier voor DLML activiteit: ${config.activityNaam || ''}">
     <meta name="Author" content="Diabetes Liga Midden-Limburg">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <style>
+        /* Extra CSS specifiek voor de nieuwe header layout */
+        #top-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr; /* Kolommen: links - midden - rechts */
+            grid-template-rows: auto auto auto; /* Rijen voor titels, datum/plaats, uur/adres */
+            gap: 2px 15px; /* Kleine verticale gap, grotere horizontale gap */
+            width: 100%;
+            text-align: center; /* Standaard centreren */
+            padding: 15px 10px; /* Padding boven/onder */
+            box-sizing: border-box; /* Voorkom dat padding breedte beinvloedt */
+        }
+        #top-title-main {
+            grid-column: 1 / -1; /* Over alle kolommen */
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1.1;
+            margin-bottom: 5px;
+        }
+         /* Subtitel kleiner maken */
+        #top-title-main span {
+             font-size: 0.8em; /* Kleiner dan hoofdtitel */
+             font-weight: normal;
+             margin-left: 10px;
+         }
+        #top-title-activity {
+             grid-column: 1 / -1; /* Over alle kolommen */
+             font-size: 22px;
+             line-height: 1.1;
+             margin-bottom: 15px; /* Meer ruimte onder activiteit naam */
+        }
+        #top-date, #top-time { text-align: left; padding-left: 10px; } /* Links uitlijnen met padding */
+        #top-location, #top-address { text-align: right; padding-right: 10px; } /* Rechts uitlijnen met padding */
+        #top-date, #top-location, #top-time, #top-address {
+             font-size: 16px;
+             line-height: 1.3;
+             align-self: center; /* Verticaal centreren in grid cel */
+        }
+    </style>
 </head>
 <body>
     <div id="content">
-        <div id="top">
-            <div>${config.inschrijvingType || ''}</div>
-            <div>${config.activityTitle || ''}</div>
-            <div> </div>
-            <div>${config.activityDate || ''}</div>
-            <div>${config.activityLocation || ''}</div>
-            <div> </div>
-            <div>${config.activityTime || ''}</div>
-            <div>${config.activityAddress || ''}</div>
-            <div> </div>
+        <div id="top"> <!-- Oude #top blijft als container voor achtergrondkleur -->
+            <div id="top-grid"> <!-- Nieuwe grid container -->
+                <div id="top-title-main">${config.inschrijvingTitel || 'Inschrijving'} ${config.subtypeTitel ? `<span>${config.subtypeTitel}</span>` : ''}</div>
+                <div id="top-title-activity">${config.activityNaam || ''}</div>
+
+                <div id="top-date">${config.activityDatum || ''}</div>
+                <div></div> <!-- Lege cel in het midden -->
+                <div id="top-location">${config.activityPlaats || ''}</div>
+
+                <div id="top-time">${config.activityUur || ''}</div>
+                <div></div> <!-- Lege cel in het midden -->
+                <div id="top-address">${config.activityAdres || ''}</div>
+            </div>
         </div>
         <div id="filenaam" style="display:none;">${config.filename || ''}</div>
         <div id="checkafzender" style="display:none;">${config.checkstring || ''}</div>
@@ -177,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  ${config.optFysiekDigitaal ? (config.textEmailVerplicht || '(**) verplicht voor digitale deelname') + '<br>' : ''}
             </div>
             <div style="width:100%; height:1px; margin-bottom: 0;"> </div>
-            <img id="logoDL" alt="Logo DLML" src="../site/image/DLML_ZBT.png"> <!-- Pas pad aan indien nodig! -->
+            <img id="logoDL" alt="Logo DLML" src="logo.png"> <!-- Pad aangepast naar logo.png -->
             <div id="containerBevestiging">
                 <div id="bevestiging">
                     <div id="bevestigingTitel"> </div>
@@ -192,22 +229,13 @@ document.addEventListener('DOMContentLoaded', () => {
     <script src="script.js"></script> <!-- Belangrijk: Zorg dat het ECHTE script.js ook wordt gegenereerd of beschikbaar is -->
 </body>
 </html>`;
-                 // ================================================
-                 // === VOLLEDIGE outputHTML TEMPLATE STRING EINDE ===
-                 // ================================================
-                 // alert("Stap 3a: Basis HTML string klaar"); // Optioneel
 
-                 // --- Testpunt 4: Start Dynamic Sections ---
-                 console.log("Stap 4: Start samenstellen dynamische secties...");
-                 let dynamicHTML = '';
-                 const createListItems = (text) => (text || '').split('\n').map(line => line.trim()).filter(line => line).map(line => `<div>${line.startsWith('•') ? '' : '• '}${line.replace(/^•\s*/, '')}</div>`).join('\n');
+                         // --- 4. Voeg Dynamische Secties in ---
+                         let dynamicHTML = '';
+                         const createListItems = (text) => (text || '').split('\n').map(line => line.trim()).filter(line => line).map(line => `<div>${line.startsWith('•') ? '' : '• '}${line.replace(/^•\s*/, '')}</div>`).join('\n');
 
-                 if (config.optFysiekDigitaal) {
-                     console.log("Stap 4a: F/D sectie toevoegen...");
-                     // ==================================
-                     // === Fysiek/Digitaal HTML START ===
-                     // ==================================
-                     dynamicHTML += `
+                         if (config.optFysiekDigitaal) {
+                             dynamicHTML += `
                          <div id="deelname">
                              <div>Deelname</div>
                               <div><input class="inln" id="fysiek" type="radio" value="fysiek" name="keuzeDeelname" checked="checked"><label class="inln" for="fysiek">${config.labelFysiek || 'Fysiek'}</label></div>
@@ -217,111 +245,194 @@ document.addEventListener('DOMContentLoaded', () => {
                              <div class="info-header">Digitale deelname:</div>
                               ${createListItems(config.textDigitaal)}
                          </div>`;
-                     // ================================
-                     // === Fysiek/Digitaal HTML EINDE ===
-                     // ================================
-                 }
-                 if (config.optMoederdag) {
-                     console.log("Stap 4b: Moederdag sectie toevoegen...");
-                     dynamicHTML += `\n${config.htmlMoederdag || '<!-- Moederdag HTML ontbreekt -->'}\n`;
-                 }
-                 // alert("Stap 4c: Dynamic HTML klaar"); // Optioneel
+                         }
+                         if (config.optMoederdag) {
+                             dynamicHTML += `\n${config.htmlMoederdag || '<!-- Moederdag HTML ontbreekt -->'}\n`;
+                         }
+                         outputHTML = outputHTML.replace('%%DYNAMIC_SECTIONS%%', dynamicHTML);
 
-                 // --- Testpunt 5: Vervang Dynamic Sections ---
-                 console.log("Stap 5: Vervang %%DYNAMIC_SECTIONS%% placeholder...");
-                 outputHTML = outputHTML.replace('%%DYNAMIC_SECTIONS%%', dynamicHTML);
-                 // alert("Stap 5a: Placeholder vervangen"); // Optioneel
+                         // --- 5. Zet de volledige HTML in de textarea ---
+                         document.getElementById('output-code').value = outputHTML;
+                         console.log("Generator Script: HTML generatie voltooid.");
 
-                 // --- Testpunt 6: Zet HTML in Textarea ---
-                 console.log("Stap 6: Zet HTML in output-code textarea...");
-                 document.getElementById('output-code').value = outputHTML;
-                 alert("Stap 6 Voltooid: Code zou nu in textarea moeten staan!"); // <<< BELANGRIJKE ALERT HIER
+                         // --- 6. Update Preview (Vereenvoudigd) ---
+                         const previewArea = document.getElementById('preview-area');
+                         try {
+                              previewArea.innerHTML = '<iframe id="preview-iframe" style="width: 100%; height: 600px; border: none;" title="Formulier Preview"></iframe>';
+                              const iframe = document.getElementById('preview-iframe');
+                              if (!iframe) throw new Error("Kon preview iframe niet vinden.");
+                              const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                              if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
+                              iframeDoc.open();
+                              iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
+                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`);
+                              iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
+                              iframeDoc.write('</head><body>');
+                              const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '<!-- Body inhoud niet gevonden -->';
+                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, '<!-- Script verwijderd voor preview -->');
+                              iframeDoc.write(bodyContent);
+                              iframeDoc.write('</body></html>');
+                              iframeDoc.close();
+                              console.log("Generator Script: Preview bijgewerkt (zonder scripts).");
+                         } catch (e) {
+                              console.error("Generator Script: Preview bijwerken mislukt:", e);
+                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}. Code staat wel in het tekstvak hieronder.</i></p>`;
+                         }
+                     } catch (error) {
+                         console.error("Generator Script: Fout tijdens genereren:", error);
+                         alert(`Fout tijdens genereren: ${error.message}.`);
+                         document.getElementById('output-code').value = `// Fout:\n// ${error}\n// ${error.stack}`;
+                         document.getElementById('preview-area').innerHTML = `<p style="color: red;">Fout: ${error.message}.</p>`;
+                     } // EINDE try block generate
+                 }); // EINDE btn-generate listener
+             } else { console.error("Generator Script: Knop 'btn-generate' niet gevonden!"); }
 
-                 // --- Testpunt 7: Start Preview Update ---
-                 console.log("Stap 7: Start preview update...");
-                 const previewArea = document.getElementById('preview-area');
-                 try { // Start try voor preview
-                     previewArea.innerHTML = '<iframe id="preview-iframe" style="width: 100%; height: 600px; border: none;" title="Formulier Preview"></iframe>';
-                     const iframe = document.getElementById('preview-iframe');
-                     if (!iframe) throw new Error("Kon preview iframe niet vinden.");
-                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                     if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
-                     iframeDoc.open();
-                     iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
-                     iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`);
-                     iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
-                     iframeDoc.write('</head><body>');
-                     const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-                     let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '<!-- Body inhoud niet gevonden -->';
-                     bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, '<!-- Script verwijderd voor preview -->');
-                     iframeDoc.write(bodyContent);
-                     iframeDoc.write('</body></html>');
-                     iframeDoc.close();
-                     console.log("Stap 7a: Preview succesvol bijgewerkt.");
-                     alert("Stap 7 Voltooid: Preview zou nu zichtbaar moeten zijn!"); // <<< TWEEDE BELANGRIJKE ALERT
+             // Koppel Kopieer knop listener
+             const copyButton = document.getElementById('btn-copy');
+             if (copyButton) {
+                copyButton.addEventListener('click', function() {
+                    const outputCode = document.getElementById('output-code');
+                     if (!outputCode.value || outputCode.value.startsWith('// Fout')) { alert("Genereer eerst de code succesvol!"); return; }
+                    outputCode.select();
+                    try {
+                         const successful = document.execCommand('copy');
+                         alert(successful ? "Code gekopieerd!" : "Kon niet automatisch kopiëren.");
+                    } catch (err) { alert("Kon niet automatisch kopiëren."); }
+                     if (window.getSelection) {window.getSelection().removeAllRanges();}
+                     else if (document.selection) {document.selection.empty();}
+                });
+             } else { console.error("Generator Script: Knop 'btn-copy' niet gevonden!"); }
 
-                 } catch (e) { // Catch specifiek voor preview
-                      console.error("Stap 7b: Preview bijwerken mislukt:", e);
-                      previewArea.innerHTML = `<p style="color:red;"><i>Preview Fout: ${e.message}.</i></p>`;
-                      alert("Fout tijdens bijwerken preview. Code staat wel in textarea.");
-                 } // Einde try-catch voor preview
+             // Koppel Download knop listener
+             const downloadButton = document.getElementById('btn-download');
+             if (downloadButton) {
+                downloadButton.addEventListener('click', function() {
+                    const code = document.getElementById('output-code').value;
+                    if (!code || code.startsWith('// Fout')) { alert("Genereer eerst de code succesvol!"); return; }
+                    const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    const filenameBase = document.getElementById('gen-filename')?.value?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'formulier';
+                    link.download = filenameBase + '_index.html';
+                    document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(link.href);
+                });
+             } else { console.error("Generator Script: Knop 'btn-download' niet gevonden!"); }
 
-                 console.log("Einde 'Genereer' knop listener succesvol bereikt.");
-
-             } catch (error) { // <<< START catch block voor HELE generatie
-                 console.error("!!! Fout tijdens genereren:", error);
-                 alert(`!!! Fout opgetreden: ${error.message}. Zie console (F12).`);
-                 document.getElementById('output-code').value = `// Fout:\n// ${error}\n// ${error.stack}`; // Toon stack trace voor debuggen
-                 document.getElementById('preview-area').innerHTML = `<p style="color: red;">Fout: ${error.message}.</p>`;
-             } // <<< EINDE catch block voor HELE generatie
-         }); // <<< EINDE btn-generate listener
-     } else {
-         console.error("Generator Script: Knop 'btn-generate' niet gevonden!");
-     }
-
-     // Koppel Kopieer knop listener
-     const copyButton = document.getElementById('btn-copy');
-     if (copyButton) {
-        copyButton.addEventListener('click', function() {
-            const outputCode = document.getElementById('output-code');
-             if (!outputCode.value || outputCode.value.startsWith('// Fout')) {
-                 alert("Genereer eerst de code succesvol!");
-                 return;
-             }
-            outputCode.select();
-            try {
-                 const successful = document.execCommand('copy');
-                 alert(successful ? "Code gekopieerd!" : "Kon niet automatisch kopiëren. Selecteer en kopieer handmatig (Ctrl+C).");
-            } catch (err) {
-                 alert("Kon niet automatisch kopiëren. Selecteer en kopieer handmatig (Ctrl+C).");
-            }
-             if (window.getSelection) {window.getSelection().removeAllRanges();}
-             else if (document.selection) {document.selection.empty();}
+             console.log("Generator Script: Initialisatie script voltooid.");
+        // EINDE VAN DOMContentLoaded listener
         });
-     } else { console.error("Generator Script: Knop 'btn-copy' niet gevonden!"); }
+    ```
 
-     // Koppel Download knop listener
-     const downloadButton = document.getElementById('btn-download');
-     if (downloadButton) {
-        downloadButton.addEventListener('click', function() {
-            const code = document.getElementById('output-code').value;
-            if (!code || code.startsWith('// Fout')) {
-                alert("Genereer eerst de code succesvol!");
-                return;
-            }
-            const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            const filenameBase = document.getElementById('gen-filename')?.value?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'formulier';
-            link.download = filenameBase + '_index.html';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
-        });
-     } else { console.error("Generator Script: Knop 'btn-download' niet gevonden!"); }
+---
 
-     console.log("Generator Script: Initialisatie script voltooid.");
+**3. `style.css` (Voor het gegenereerde formulier)**
 
-// EINDE VAN DOMContentLoaded listener
-});
+```css
+/* === Algemene Pagina Stijlen === */
+html, body { /* ... (blijft hetzelfde) ... */ }
+#content { /* ... (blijft hetzelfde) ... */ }
+
+/* === Header Sectie (#top) === */
+#top {
+    /* Alleen achtergrond en basis padding hier */
+    background-color: #663ab7; /* Paarse achtergrond */
+    color: #ffffff; /* Witte tekst */
+    padding: 0; /* Grid regelt padding */
+    box-sizing: border-box;
+}
+/* Grid Styling (nu inline in de gegenereerde HTML, deze zijn niet meer nodig hier) */
+/* #top-grid { ... } */
+/* #top-title-main { ... } */
+/* #top-title-activity { ... } */
+/* etc... */
+
+/* === Formulier Sectie (#myForm) === */
+#myForm { /* ... (blijft hetzelfde) ... */ }
+#myForm > *:not(#logoDL):not(#containerBevestiging) { /* ... (blijft hetzelfde) ... */ }
+#myForm .inln { /* ... (blijft hetzelfde) ... */ }
+#myForm .lnfd { /* ... (blijft hetzelfde) ... */ }
+
+/* === Labels en Foutmeldingen === */
+label { /* ... (blijft hetzelfde) ... */ }
+label span { /* ... (blijft hetzelfde) ... */ }
+
+/* === Input Velden en Textarea === */
+input[type=text], input[type=email], textarea { /* ... (blijft hetzelfde) ... */ }
+input[type=text]:focus, input[type=email]:focus, textarea:focus { /* ... (blijft hetzelfde) ... */ }
+input::placeholder, textarea::placeholder { /* ... (blijft hetzelfde) ... */ }
+#naam { max-width: 300px; }
+#voornaam { max-width: 250px; }
+#email { max-width: 350px; }
+#tel { max-width: 250px; }
+#aantal { max-width: 100px; }
+textarea#opmerkingen { max-width: 100%; width: 400px; resize: none; min-height: 100px; }
+
+/* === Deelname Sectie (Grid Layout) === */
+#deelname { /* ... (blijft hetzelfde) ... */ }
+#deelname > div:first-child { /* ... (blijft hetzelfde) ... */ }
+#deelname div:has(input[type="radio"]) { /* ... (blijft hetzelfde) ... */ }
+#deelname input[type="radio"] { /* ... (blijft hetzelfde) ... */ }
+#deelname label.inln { /* ... (blijft hetzelfde) ... */ }
+#deelname .info-header { /* ... (blijft hetzelfde) ... */ }
+#deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { /* ... (blijft hetzelfde) ... */ }
+
+/* === Attest Checkbox === */
+label[for="attest"] { /* ... (blijft hetzelfde) ... */ }
+#attest { /* ... (blijft hetzelfde) ... */ }
+
+/* === Knoppen === */
+#btnSubmit, #fakeBtnSubmit { /* ... (blijft hetzelfde) ... */ }
+#btnSubmit { /* ... (blijft hetzelfde) ... */ }
+#btnSubmit:hover { /* ... (blijft hetzelfde) ... */ }
+#fakeBtnSubmit { /* ... (blijft hetzelfde) ... */ }
+#txtFakeBtnSubmit { /* ... (blijft hetzelfde) ... */ }
+#txtVerplicht { /* ... (blijft hetzelfde) ... */ }
+
+/* === Logo === */
+#logoDL {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    width: 150px; /* Pas breedte aan indien nodig */
+    height: auto;
+}
+
+/* === Bevestiging Pop-up === */
+#containerBevestiging { /* ... (blijft hetzelfde) ... */ }
+#containerBevestiging.visible { /* ... (blijft hetzelfde) ... */ }
+#bevestiging { /* ... (blijft hetzelfde) ... */ }
+#bevestiging:hover { /* ... (blijft hetzelfde) ... */ }
+#bevestigingTitel { /* ... (blijft hetzelfde) ... */ }
+#bevestigingMsg { /* ... (blijft hetzelfde) ... */ }
+#bevestiging #btnOK { /* ... (blijft hetzelfde) ... */ }
+#bevestiging #btnOK:hover { /* ... (blijft hetzelfde) ... */ }
+
+/* === Helper Classes === */
+.error-border { /* ... (blijft hetzelfde) ... */ }
+
+/* === Responsive Aanpassingen === */
+@media (max-width: 700px) {
+    #content { width: 98%; margin: 10px auto; }
+    /* Pas op met grid in header op mobiel, kan anders nodig zijn */
+    #top-grid { grid-template-columns: 1fr 1fr; text-align: center; gap: 5px; padding: 10px; } /* Simpeler grid */
+    #top-title-main, #top-title-activity { grid-column: 1 / -1; } /* Titels over volle breedte */
+    #top-date, #top-time { text-align: left; padding-left: 5px; grid-column: 1 / 2; }
+    #top-location, #top-address { text-align: right; padding-right: 5px; grid-column: 2 / 3; }
+    #top-grid > div:nth-child(4) ~ div:nth-child(odd) { /* Plaats/Adres op volgende rij */
+       /* grid-row: 3; */ /* Kan complex worden, check layout */
+    }
+
+    #myForm { /* ... (blijft hetzelfde) ... */ }
+    #logoDL { /* ... (blijft hetzelfde) ... */ }
+    input[type=text], input[type=email], textarea, #naam, #voornaam, #email, #tel, #aantal, textarea#opmerkingen { max-width: 100%; width: 100%; }
+    #deelname { grid-template-columns: 25px auto; column-gap: 5px; padding: 10px; }
+    #deelname > div:first-child, #deelname .info-header, #deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { grid-column: 1 / -1; padding-left: 0; }
+    #deelname div:has(input[type="radio"]) { padding-left: 0; }
+    #btnSubmit, #fakeBtnSubmit { width: 100%; box-sizing: border-box; }
+    #bevestiging { width: 90%; min-width: unset; }
+    #bevestigingTitel { font-size: 16px; margin-bottom: 15px; }
+    #bevestigingMsg { font-size: 15px; padding: 0 15px 20px 15px; }
+    #bevestiging #btnOK { width: 80%; padding: 10px 15px; }
+}
