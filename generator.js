@@ -56,11 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     inschrijvingTitel: document.getElementById('gen-inschrijving-titel').value,
                     subtypeTitel: document.getElementById('gen-subtype-titel').value,
                     activityNaam: document.getElementById('gen-activity-naam').value,
-                    activityDatum: document.getElementById('gen-activity-datum').value, // Nieuwe ID
-                    activityUur: document.getElementById('gen-activity-uur').value,     // Nieuwe ID
-                    activityPlaats: document.getElementById('gen-activity-plaats').value, // Nieuwe ID
-                    activityAdres: document.getElementById('gen-activity-adres').value, // Nieuwe ID
-                    pageTitle: document.getElementById('gen-page-title').value, // Behoud deze
+                    activityDatum: document.getElementById('gen-activity-datum').value,
+                    activityUur: document.getElementById('gen-activity-uur').value,
+                    activityPlaats: document.getElementById('gen-activity-plaats').value,
+                    activityAdres: document.getElementById('gen-activity-adres').value,
+                    pageTitle: document.getElementById('gen-page-title').value,
                     filename: document.getElementById('gen-filename').value,
                     checkstring: document.getElementById('gen-checkstring').value,
                     // Sectie 2
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (config.optEten && !config.labelAantalAct) { config.labelAantalAct = config.labelAantal; }
                  console.log("Generator Script: Configuratie gelezen.");
 
-                 // --- 3. Basis HTML Template String (met aangepaste header en logo pad) ---
+                 // --- 3. Basis HTML Template String (met align-items toegevoegd!) ---
                  let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -108,57 +108,32 @@ document.addEventListener('DOMContentLoaded', () => {
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <style>
         /* Extra CSS specifiek voor de nieuwe header layout */
-        #top-grid {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr; /* Kolommen: links - midden - rechts */
-            grid-template-rows: auto auto auto; /* Rijen voor titels, datum/plaats, uur/adres */
-            gap: 2px 15px; /* Kleine verticale gap, grotere horizontale gap */
-            width: 100%;
-            text-align: center; /* Standaard centreren */
-            padding: 15px 10px; /* Padding boven/onder */
-            box-sizing: border-box; /* Voorkom dat padding breedte beinvloedt */
-        }
-        #top-title-main {
-            grid-column: 1 / -1; /* Over alle kolommen */
-            font-size: 28px;
-            font-weight: bold;
-            line-height: 1.1;
-            margin-bottom: 5px;
-        }
-         /* Subtitel kleiner maken */
-        #top-title-main span {
-             font-size: 0.8em; /* Kleiner dan hoofdtitel */
-             font-weight: normal;
-             margin-left: 10px;
-         }
-        #top-title-activity {
-             grid-column: 1 / -1; /* Over alle kolommen */
-             font-size: 22px;
-             line-height: 1.1;
-             margin-bottom: 15px; /* Meer ruimte onder activiteit naam */
-        }
-        #top-date, #top-time { text-align: left; padding-left: 10px; } /* Links uitlijnen met padding */
-        #top-location, #top-address { text-align: right; padding-right: 10px; } /* Rechts uitlijnen met padding */
-        #top-date, #top-location, #top-time, #top-address {
-             font-size: 16px;
-             line-height: 1.3;
-             align-self: center; /* Verticaal centreren in grid cel */
+        #top-grid { display: grid; grid-template-columns: 1fr auto 1fr; grid-template-rows: auto auto auto; gap: 2px 15px; width: 100%; text-align: center; padding: 15px 10px; box-sizing: border-box; align-items: center; } /* <<< align-items HIER TOEGEVOEGD */
+        #top-title-main { grid-column: 1 / -1; font-size: 28px; font-weight: bold; line-height: 1.1; margin-bottom: 5px; }
+        #top-title-main span { font-size: 0.8em; font-weight: normal; margin-left: 10px; }
+        #top-title-activity { grid-column: 1 / -1; font-size: 22px; line-height: 1.1; margin-bottom: 15px; }
+        #top-date, #top-time { text-align: left; padding-left: 10px; }
+        #top-location, #top-address { text-align: right; padding-right: 10px; }
+        #top-date, #top-location, #top-time, #top-address { font-size: 16px; line-height: 1.3; } /* align-self weggehaald */
+        /* Responsive Header Grid */
+        @media (max-width: 700px) {
+             #top-grid { grid-template-columns: 1fr 1fr; gap: 5px 10px; padding: 10px 5px; }
+             #top-date, #top-time { grid-column: 1 / 2; padding-left: 5px; }
+             #top-location, #top-address { grid-column: 2 / 3; padding-right: 5px; }
         }
     </style>
 </head>
 <body>
     <div id="content">
-        <div id="top"> <!-- Oude #top blijft als container voor achtergrondkleur -->
-            <div id="top-grid"> <!-- Nieuwe grid container -->
+        <div id="top">
+            <div id="top-grid">
                 <div id="top-title-main">${config.inschrijvingTitel || 'Inschrijving'} ${config.subtypeTitel ? `<span>${config.subtypeTitel}</span>` : ''}</div>
                 <div id="top-title-activity">${config.activityNaam || ''}</div>
-
                 <div id="top-date">${config.activityDatum || ''}</div>
-                <div></div> <!-- Lege cel in het midden -->
+                <div></div>
                 <div id="top-location">${config.activityPlaats || ''}</div>
-
                 <div id="top-time">${config.activityUur || ''}</div>
-                <div></div> <!-- Lege cel in het midden -->
+                <div></div>
                 <div id="top-address">${config.activityAdres || ''}</div>
             </div>
         </div>
@@ -214,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  ${config.optFysiekDigitaal ? (config.textEmailVerplicht || '(**) verplicht voor digitale deelname') + '<br>' : ''}
             </div>
             <div style="width:100%; height:1px; margin-bottom: 0;"> </div>
-            <img id="logoDL" alt="Logo DLML" src="logo.png"> <!-- Pad aangepast naar logo.png -->
+            <img id="logoDL" alt="Logo DLML" src="logo.png"> <!-- Pad naar logo.png -->
             <div id="containerBevestiging">
                 <div id="bevestiging">
                     <div id="bevestigingTitel"> </div>
@@ -226,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div style="width:100%; height:25px;"> </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="script.js"></script> <!-- Belangrijk: Zorg dat het ECHTE script.js ook wordt gegenereerd of beschikbaar is -->
+    <script src="script.js"></script> <!-- Het ECHTE script.js -->
 </body>
 </html>`;
 
@@ -265,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
                               if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
                               iframeDoc.open();
                               iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
-                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`);
+                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`); // style.css moet in dezelfde map staan!
                               iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
                               iframeDoc.write('</head><body>');
                               const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
@@ -320,119 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
              } else { console.error("Generator Script: Knop 'btn-download' niet gevonden!"); }
 
              console.log("Generator Script: Initialisatie script voltooid.");
-        // EINDE VAN DOMContentLoaded listener
-        });
-    ```
 
----
-
-**3. `style.css` (Voor het gegenereerde formulier)**
-
-```css
-/* === Algemene Pagina Stijlen === */
-html, body { /* ... (blijft hetzelfde) ... */ }
-#content { /* ... (blijft hetzelfde) ... */ }
-
-/* === Header Sectie (#top) === */
-#top {
-    /* Alleen achtergrond en basis padding hier */
-    background-color: #663ab7; /* Paarse achtergrond */
-    color: #ffffff; /* Witte tekst */
-    padding: 0; /* Grid regelt padding */
-    box-sizing: border-box;
-}
-/* Grid Styling (nu inline in de gegenereerde HTML, deze zijn niet meer nodig hier) */
-/* #top-grid { ... } */
-/* #top-title-main { ... } */
-/* #top-title-activity { ... } */
-/* etc... */
-
-/* === Formulier Sectie (#myForm) === */
-#myForm { /* ... (blijft hetzelfde) ... */ }
-#myForm > *:not(#logoDL):not(#containerBevestiging) { /* ... (blijft hetzelfde) ... */ }
-#myForm .inln { /* ... (blijft hetzelfde) ... */ }
-#myForm .lnfd { /* ... (blijft hetzelfde) ... */ }
-
-/* === Labels en Foutmeldingen === */
-label { /* ... (blijft hetzelfde) ... */ }
-label span { /* ... (blijft hetzelfde) ... */ }
-
-/* === Input Velden en Textarea === */
-input[type=text], input[type=email], textarea { /* ... (blijft hetzelfde) ... */ }
-input[type=text]:focus, input[type=email]:focus, textarea:focus { /* ... (blijft hetzelfde) ... */ }
-input::placeholder, textarea::placeholder { /* ... (blijft hetzelfde) ... */ }
-#naam { max-width: 300px; }
-#voornaam { max-width: 250px; }
-#email { max-width: 350px; }
-#tel { max-width: 250px; }
-#aantal { max-width: 100px; }
-textarea#opmerkingen { max-width: 100%; width: 400px; resize: none; min-height: 100px; }
-
-/* === Deelname Sectie (Grid Layout) === */
-#deelname { /* ... (blijft hetzelfde) ... */ }
-#deelname > div:first-child { /* ... (blijft hetzelfde) ... */ }
-#deelname div:has(input[type="radio"]) { /* ... (blijft hetzelfde) ... */ }
-#deelname input[type="radio"] { /* ... (blijft hetzelfde) ... */ }
-#deelname label.inln { /* ... (blijft hetzelfde) ... */ }
-#deelname .info-header { /* ... (blijft hetzelfde) ... */ }
-#deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { /* ... (blijft hetzelfde) ... */ }
-
-/* === Attest Checkbox === */
-label[for="attest"] { /* ... (blijft hetzelfde) ... */ }
-#attest { /* ... (blijft hetzelfde) ... */ }
-
-/* === Knoppen === */
-#btnSubmit, #fakeBtnSubmit { /* ... (blijft hetzelfde) ... */ }
-#btnSubmit { /* ... (blijft hetzelfde) ... */ }
-#btnSubmit:hover { /* ... (blijft hetzelfde) ... */ }
-#fakeBtnSubmit { /* ... (blijft hetzelfde) ... */ }
-#txtFakeBtnSubmit { /* ... (blijft hetzelfde) ... */ }
-#txtVerplicht { /* ... (blijft hetzelfde) ... */ }
-
-/* === Logo === */
-#logoDL {
-    display: block;
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    width: 150px; /* Pas breedte aan indien nodig */
-    height: auto;
-}
-
-/* === Bevestiging Pop-up === */
-#containerBevestiging { /* ... (blijft hetzelfde) ... */ }
-#containerBevestiging.visible { /* ... (blijft hetzelfde) ... */ }
-#bevestiging { /* ... (blijft hetzelfde) ... */ }
-#bevestiging:hover { /* ... (blijft hetzelfde) ... */ }
-#bevestigingTitel { /* ... (blijft hetzelfde) ... */ }
-#bevestigingMsg { /* ... (blijft hetzelfde) ... */ }
-#bevestiging #btnOK { /* ... (blijft hetzelfde) ... */ }
-#bevestiging #btnOK:hover { /* ... (blijft hetzelfde) ... */ }
-
-/* === Helper Classes === */
-.error-border { /* ... (blijft hetzelfde) ... */ }
-
-/* === Responsive Aanpassingen === */
-@media (max-width: 700px) {
-    #content { width: 98%; margin: 10px auto; }
-    /* Pas op met grid in header op mobiel, kan anders nodig zijn */
-    #top-grid { grid-template-columns: 1fr 1fr; text-align: center; gap: 5px; padding: 10px; } /* Simpeler grid */
-    #top-title-main, #top-title-activity { grid-column: 1 / -1; } /* Titels over volle breedte */
-    #top-date, #top-time { text-align: left; padding-left: 5px; grid-column: 1 / 2; }
-    #top-location, #top-address { text-align: right; padding-right: 5px; grid-column: 2 / 3; }
-    #top-grid > div:nth-child(4) ~ div:nth-child(odd) { /* Plaats/Adres op volgende rij */
-       /* grid-row: 3; */ /* Kan complex worden, check layout */
-    }
-
-    #myForm { /* ... (blijft hetzelfde) ... */ }
-    #logoDL { /* ... (blijft hetzelfde) ... */ }
-    input[type=text], input[type=email], textarea, #naam, #voornaam, #email, #tel, #aantal, textarea#opmerkingen { max-width: 100%; width: 100%; }
-    #deelname { grid-template-columns: 25px auto; column-gap: 5px; padding: 10px; }
-    #deelname > div:first-child, #deelname .info-header, #deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { grid-column: 1 / -1; padding-left: 0; }
-    #deelname div:has(input[type="radio"]) { padding-left: 0; }
-    #btnSubmit, #fakeBtnSubmit { width: 100%; box-sizing: border-box; }
-    #bevestiging { width: 90%; min-width: unset; }
-    #bevestigingTitel { font-size: 16px; margin-bottom: 15px; }
-    #bevestigingMsg { font-size: 15px; padding: 0 15px 20px 15px; }
-    #bevestiging #btnOK { width: 80%; padding: 10px 15px; }
-}
+    // EINDE VAN DOMContentLoaded listener
+    });
