@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                  // --- 2. Lees alle andere waarden en bouw config object ---
                  const config = {
-                    // Sectie 1 (AANGEPAST)
+                    // Sectie 1
                     inschrijvingTitel: document.getElementById('gen-inschrijving-titel').value,
                     subtypeTitel: document.getElementById('gen-subtype-titel').value,
                     activityNaam: document.getElementById('gen-activity-naam').value,
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (config.optEten && !config.labelAantalAct) { config.labelAantalAct = config.labelAantal; }
                  console.log("Generator Script: Configuratie gelezen.");
 
-                 // --- 3. Basis HTML Template String (met AANGEPASTE @media query!) ---
+                 // --- 3. Basis HTML Template String (met aangepaste @media query!) ---
                  let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         #top-flex-left { text-align: left !important; }
         #top-flex-right { text-align: right !important; }
 
-         /* Responsive aanpassing (MEEST DWINGENDE VERSIE) */
+         /* Responsive aanpassing (MEEST COMPACTE VERSIE) */
          @media (max-width: 700px) {
              #top-flex {
                  flex-direction: column !important; /* Forceer kolom */
@@ -139,16 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
                   padding: 0 !important; /* Geen extra padding binnen blok */
              }
               /* Bepaal volgorde expliciet */
-              #top-flex-center { order: 1; margin-bottom: 10px; } /* Titels eerst, iets meer ruimte */
+              #top-flex-center { order: 1; margin-bottom: 8px; } /* Titels eerst, iets minder ruimte */
               #top-flex-left { order: 2; } /* Datum/tijd daarna */
               #top-flex-right { order: 3; } /* Locatie/adres laatst */
 
-              /* Styling voor de tekstregels *binnen* de blokken */
+              /* Styling voor de tekstregels *binnen* de blokken op MOBIEL (COMPACTER) */
               #top-flex-left > div,
               #top-flex-right > div {
-                   margin-bottom: 1px !important; /* Minimale ruimte */
-                   padding: 1px 0 !important;
-                   line-height: 1.3 !important; /* Compact */
+                   margin-bottom: 0px !important; /* GEEN ruimte onder elke regel */
+                   padding: 0px 0 !important;     /* GEEN verticale padding */
+                   line-height: 1.2 !important; /* Zeer compacte regelhoogte */
                    text-align: center !important; /* Extra zekerheid: centreer */
               }
 
@@ -161,8 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
 <body>
     <div id="content">
          <!-- AANGEPASTE HEADER STRUCTUUR -->
-         <div id="top"> <!-- #top nu alleen voor achtergrond/container -->
-             <div id="top-flex"> <!-- Nieuwe Flex container -->
+         <div id="top">
+             <div id="top-flex">
                   <div id="top-flex-left">
                       <div>${config.activityDatum || ''}</div>
                       <div>${config.activityUur || ''}</div>
@@ -282,20 +282,22 @@ document.addEventListener('DOMContentLoaded', () => {
                               if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
                               iframeDoc.open();
                               iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
-                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`);
+                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`); // style.css moet in dezelfde map staan!
                               iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
                               iframeDoc.write('</head><body>');
                               const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '';
-                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, ''); // Verwijder scripts
+                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '<!-- Body inhoud niet gevonden -->';
+                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, '<!-- Script verwijderd voor preview -->');
                               iframeDoc.write(bodyContent);
                               iframeDoc.write('</body></html>');
                               iframeDoc.close();
                               console.log("Generator Script: Preview bijgewerkt (zonder scripts).");
                          } catch (e) {
                               console.error("Generator Script: Preview bijwerken mislukt:", e);
-                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}.</i></p>`;
+                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}. Code staat wel in het tekstvak hieronder.</i></p>`;
                          }
+                         // --- EINDE Preview Update ---
+
                      } catch (error) {
                          console.error("Generator Script: Fout tijdens genereren:", error);
                          alert(`Fout tijdens genereren: ${error.message}.`);
