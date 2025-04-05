@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inschrijving [Activiteit Naam]</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link naar externe CSS -->
+    <meta name="Description" content="Inschrijfformulier voor DLML activiteit: NIEUWE TECHNIEKEN - NIEUWE MEDICATIE">
+    <meta name="Author" content="Diabetes Liga Midden-Limburg">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <!-- GEEN inline <style> voor header meer -->
+</head>
+<body>
+    <div id="content">
+         <!-- ORIGINELE HEADER STRUCTUUR -->
+         <div id="top">
+            <div>Inschrijving infosessie</div>
+            <div>NIEUWE TECHNIEKEN - NIEUWE MEDICATIE</div>
+            <div> </div> <!-- Spacer -->
+            <div>Donderdag 27 november 2025</div>
+            <div>JZ aula Salvator Ziekenhuis</div>
+            <div> </div> <!-- Spacer -->
+            <div>20.00 u - 22.00 u</div>
+            <div>Salvatorstraat 20, 3500 Hasselt</div>
+            <div> </div> <!-- Spacer -->
+        </div>
+         <!-- EINDE ORIGINELE HEADER STRUCTUUR -->
+
+        <div id="filenaam" style="display:none;">lijst_activiteit</div>
+        <div id="checkafzender" style="display:none;">check_activiteit_ddmmyyyy</div>
+        <form id="myForm" action="#" method="post" accept-charset="utf-8">
+            <label class="lnfd" for="naam">Naam (*)<span> gelieve uw naam in te vullen! </span><br><input type="text" id="naam" name="naam" size="30" placeholder="Naam"></label>
+            <label class="lnfd" for="voornaam">Voornaam<br><input type="text" id="voornaam" name="voornaam" size="25" placeholder="Voornaam"></label>
+            <label for="email">E-mail (**)<span> gelieve uw e-mail te noteren! </span><br><input class="lnfd" type="text" id="email" name="email" size="40" placeholder="@emaildomein.be"></label>
+            <label for="tel">Tel/GSM<br><input class="lnfd" type="text" id="tel" name="tel" size="25" placeholder="Telefoonnummer"></label>
+            
+            <label for="aantal">Aantal deelnemers (*)<span> gelieve het aantal deelnemers te vermelden! </span><br><input class="lnfd" type="text" id="aantal" name="aantal" size="8" value="" placeholder="Aantal"></label>
+            
+            <label class="lnfd" for="attest"><input id="attest" name="attest" type="checkbox" value="ja"> Wenst een deelname-attest</label>
+            <label for="opmerkingen">Opmerkingen</label><textarea class="lnfd" id="opmerkingen" name="opmerkingen" cols="35" rows="6"></textarea>
+            <button class="lnfd" id="btnSubmit" type="submit">Inschrijven</button><button id="fakeBtnSubmit" type="button">Inschrijven</button><div class="lnfd" id="txtFakeBtnSubmit">Gelieve alle verplichte velden in te vullen</div><div id="txtVerplicht">(*) velden zijn verplicht<br></div><div style="width:100%; height:1px; margin-bottom: 0;"> </div>
+            <img id="logoDL" alt="Logo DLML" src="logo.png">
+            <div id="containerBevestiging"><div id="bevestiging"><div id="bevestigingTitel"> </div><div id="bevestigingMsg">Inschrijving wordt verwerkt...</div><div id="btnOK">Ok</div></div></div>
+        </form>
+        <div style="width:100%; height:25px;"> </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
