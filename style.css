@@ -32,7 +32,7 @@ html, body {
     height: auto;
     background-color: #663ab7; /* Paarse achtergrond */
     color: #ffffff; /* Witte tekst */
-    padding: 10px 20px; /* Padding rondom, iets meer horizontaal */
+    padding: 25px 20px; /* Padding rondom, iets meer horizontaal */
     box-sizing: border-box; /* Padding telt mee in de breedte */
     text-align: center; /* Centreer tekst binnen #top */
 }
@@ -46,7 +46,7 @@ html, body {
 #top div:nth-child(5), /* Plaats */
 #top div:nth-child(7), /* Uur */
 #top div:nth-child(8) { /* Adres */
-     padding: 2px 10px;
+     padding: 0px 0px;
      font-size: 16px; /* Standaard grootte */
      line-height: 1.3;
 }
