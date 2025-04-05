@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                  // --- 2. Lees alle andere waarden en bouw config object ---
                  const config = {
-                    // Sectie 1
+                    // Sectie 1 (AANGEPAST)
                     inschrijvingTitel: document.getElementById('gen-inschrijving-titel').value,
                     subtypeTitel: document.getElementById('gen-subtype-titel').value,
                     activityNaam: document.getElementById('gen-activity-naam').value,
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (config.optEten && !config.labelAantalAct) { config.labelAantalAct = config.labelAantal; }
                  console.log("Generator Script: Configuratie gelezen.");
 
-                 // --- 3. Basis HTML Template String (Nieuwe Header CSS/HTML) ---
+                 // --- 3. Basis HTML Template String (met AANGEPASTE @media query!) ---
                  let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -108,38 +108,53 @@ document.addEventListener('DOMContentLoaded', () => {
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <style>
         /* Extra CSS specifiek voor de header layout (Flexbox met !important) */
-        #top {
-             padding: 0 !important; /* Verwijder padding van externe CSS */
-             background-color: #663ab7 !important; /* Behoud achtergrond */
-             color: white !important;
-             display: block !important; /* Overschrijf display:flex uit style.css */
-        }
-        #top-flex { /* Nieuwe container voor de flex layout */
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between; /* Ruimte tussen L/C/R blokken */
-            align-items: center; /* Verticaal centreren */
-            width: 100%;
-            padding: 15px 15px; /* Padding hier */
-            box-sizing: border-box;
-            text-align: center;
-            font-family: 'Roboto', sans-serif;
-        }
+        #top { padding: 0 !important; background-color: #663ab7 !important; color: white !important; display: block !important; margin-bottom: -1px !important; }
+        #top-flex { display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; padding: 15px 15px !important; box-sizing: border-box !important; text-align: center !important; font-family: 'Roboto', sans-serif !important; }
         #top-flex-center { flex-grow: 1; padding: 0 10px; margin-bottom: 10px; }
         #top-title-main { font-size: 28px; font-weight: bold; line-height: 1.1; margin-bottom: 5px; }
         #top-title-main span { font-size: 0.8em; font-weight: normal; margin-left: 10px; }
         #top-title-activity { font-size: 22px; line-height: 1.1; }
-        #top-flex-left, #top-flex-right { font-size: 16px; line-height: 1.4; min-width: 180px; padding-top: 5px; }
-        #top-flex-left { text-align: left; }
-        #top-flex-right { text-align: right; }
+        #top-flex-left, #top-flex-right { font-size: 16px; line-height: 1.4 !important; min-width: 180px; padding-top: 5px; }
+        #top-flex-left { text-align: left !important; }
+        #top-flex-right { text-align: right !important; }
 
-         /* Responsive */
+         /* Responsive aanpassing (MEEST DWINGENDE VERSIE) */
          @media (max-width: 700px) {
-             #top-flex { flex-direction: column; align-items: center; padding: 10px; }
-             #top-flex-left, #top-flex-right, #top-flex-center { width: 100%; text-align: center !important; min-width: unset; }
-             #top-flex-left { order: 2; margin-top: 5px;}
-             #top-flex-center { order: 1; margin-bottom: 8px; }
-             #top-flex-right { order: 3; }
+             #top-flex {
+                 flex-direction: column !important; /* Forceer kolom */
+                 align-items: center !important; /* Forceer centreren */
+                 justify-content: flex-start !important; /* Begin bovenaan */
+                 padding: 10px 5px !important; /* Mobiele padding */
+                 text-align: center !important; /* Forceer tekst centreren */
+             }
+             /* Reset basis flex-eigenschappen voor de blokken */
+             #top-flex-left,
+             #top-flex-right,
+             #top-flex-center {
+                  order: 0; /* Reset volgorde basis */
+                  width: 100% !important; /* Forceer volle breedte */
+                  text-align: center !important; /* Forceer centreren */
+                  min-width: unset !important; /* Reset min-width */
+                  margin-bottom: 5px !important; /* Kleinere, geforceerde marge */
+                  padding: 0 !important; /* Geen extra padding binnen blok */
+             }
+              /* Bepaal volgorde expliciet */
+              #top-flex-center { order: 1; margin-bottom: 10px; } /* Titels eerst, iets meer ruimte */
+              #top-flex-left { order: 2; } /* Datum/tijd daarna */
+              #top-flex-right { order: 3; } /* Locatie/adres laatst */
+
+              /* Styling voor de tekstregels *binnen* de blokken */
+              #top-flex-left > div,
+              #top-flex-right > div {
+                   margin-bottom: 1px !important; /* Minimale ruimte */
+                   padding: 1px 0 !important;
+                   line-height: 1.3 !important; /* Compact */
+                   text-align: center !important; /* Extra zekerheid: centreer */
+              }
+
+              /* Titel styling aanpassen voor mobiel indien nodig */
+              #top-title-main { font-size: 22px; }
+              #top-title-activity { font-size: 18px; }
          }
     </style>
 </head>
@@ -267,22 +282,20 @@ document.addEventListener('DOMContentLoaded', () => {
                               if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
                               iframeDoc.open();
                               iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
-                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`); // style.css moet in dezelfde map staan!
+                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`);
                               iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
                               iframeDoc.write('</head><body>');
                               const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '<!-- Body inhoud niet gevonden -->';
-                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, '<!-- Script verwijderd voor preview -->');
+                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '';
+                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, ''); // Verwijder scripts
                               iframeDoc.write(bodyContent);
                               iframeDoc.write('</body></html>');
                               iframeDoc.close();
                               console.log("Generator Script: Preview bijgewerkt (zonder scripts).");
                          } catch (e) {
                               console.error("Generator Script: Preview bijwerken mislukt:", e);
-                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}. Code staat wel in het tekstvak hieronder.</i></p>`;
+                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}.</i></p>`;
                          }
-                         // --- EINDE Preview Update ---
-
                      } catch (error) {
                          console.error("Generator Script: Fout tijdens genereren:", error);
                          alert(`Fout tijdens genereren: ${error.message}.`);
