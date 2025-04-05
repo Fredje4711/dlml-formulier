@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (config.optEten && !config.labelAantalAct) { config.labelAantalAct = config.labelAantal; }
                  console.log("Generator Script: Configuratie gelezen.");
 
-                 // --- 3. Basis HTML Template String (met VEREENVOUDIGDE Flexbox Header!) ---
+                 // --- 3. Basis HTML Template String (Nieuwe Header CSS/HTML) ---
                  let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -107,70 +107,62 @@ document.addEventListener('DOMContentLoaded', () => {
     <meta name="Author" content="Diabetes Liga Midden-Limburg">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <style>
-        /* Extra CSS specifiek voor de VEREENVOUDIGDE header layout (Flexbox) */
-        #top-test {
-            background-color: #663ab7; /* Paars */
-            color: white;
-            padding: 15px; /* Padding rondom */
+        /* Extra CSS specifiek voor de header layout (Flexbox met !important) */
+        #top {
+             padding: 0 !important; /* Verwijder padding van externe CSS */
+             background-color: #663ab7 !important; /* Behoud achtergrond */
+             color: white !important;
+             display: block !important; /* Overschrijf display:flex uit style.css */
+        }
+        #top-flex { /* Nieuwe container voor de flex layout */
             display: flex;
-            flex-wrap: wrap; /* Wrap op kleinere schermen */
-            justify-content: space-between; /* Ruimte tussen links/midden/rechts */
-            align-items: flex-start; /* Begin bovenaan, laat items zelf hoogte bepalen */
-            font-family: 'Roboto', sans-serif;
-            text-align: center; /* Standaard centreren */
+            flex-wrap: wrap;
+            justify-content: space-between; /* Ruimte tussen L/C/R blokken */
+            align-items: center; /* Verticaal centreren */
+            width: 100%;
+            padding: 15px 15px; /* Padding hier */
             box-sizing: border-box;
-            margin-bottom: -1px; /* Overlap met border myForm */
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
         }
-        #top-test-center { /* Middelste kolom voor titels */
-             flex-grow: 1; /* Neemt beschikbare ruimte */
-             padding: 0 10px; /* Ruimte naast titels */
-             margin-bottom: 10px; /* Ruimte onder titels */
-        }
+        #top-flex-center { flex-grow: 1; padding: 0 10px; margin-bottom: 10px; }
         #top-title-main { font-size: 28px; font-weight: bold; line-height: 1.1; margin-bottom: 5px; }
         #top-title-main span { font-size: 0.8em; font-weight: normal; margin-left: 10px; }
         #top-title-activity { font-size: 22px; line-height: 1.1; }
+        #top-flex-left, #top-flex-right { font-size: 16px; line-height: 1.4; min-width: 180px; padding-top: 5px; }
+        #top-flex-left { text-align: left; }
+        #top-flex-right { text-align: right; }
 
-        #top-test-left, #top-test-right { /* Linker en rechter kolommen */
-            font-size: 16px;
-            line-height: 1.4; /* Belangrijk voor hoogte */
-            padding-top: 5px; /* Kleine ruimte boven tekst */
-             min-width: 200px; /* Voorkom te smal worden */
-        }
-        #top-test-left { text-align: left; }
-        #top-test-right { text-align: right; }
-
-         /* Responsive aanpassing */
+         /* Responsive */
          @media (max-width: 700px) {
-             #top-test { justify-content: center; } /* Centreer alles op mobiel */
-             #top-test-left, #top-test-right, #top-test-center {
-                  width: 100%;
-                  text-align: center !important; /* Forceer centreren */
-                  min-width: unset;
-             }
-              #top-test-left { order: 2; } /* Datum/tijd na titels */
-              #top-test-center { order: 1; } /* Titels eerst */
-              #top-test-right { order: 3; } /* Locatie/adres laatst */
+             #top-flex { flex-direction: column; align-items: center; padding: 10px; }
+             #top-flex-left, #top-flex-right, #top-flex-center { width: 100%; text-align: center !important; min-width: unset; }
+             #top-flex-left { order: 2; margin-top: 5px;}
+             #top-flex-center { order: 1; margin-bottom: 8px; }
+             #top-flex-right { order: 3; }
          }
     </style>
 </head>
 <body>
     <div id="content">
-        <!-- VEREENVOUDIGDE HEADER HTML -->
-        <div id="top-test">
-             <div id="top-test-left">
-                 <div>${config.activityDatum || ''}</div>
-                 <div>${config.activityUur || ''}</div>
+         <!-- AANGEPASTE HEADER STRUCTUUR -->
+         <div id="top"> <!-- #top nu alleen voor achtergrond/container -->
+             <div id="top-flex"> <!-- Nieuwe Flex container -->
+                  <div id="top-flex-left">
+                      <div>${config.activityDatum || ''}</div>
+                      <div>${config.activityUur || ''}</div>
+                  </div>
+                  <div id="top-flex-center">
+                      <div id="top-title-main">${config.inschrijvingTitel || 'Inschrijving'} ${config.subtypeTitel ? `<span>${config.subtypeTitel}</span>` : ''}</div>
+                      <div id="top-title-activity">${config.activityNaam || ''}</div>
+                 </div>
+                  <div id="top-flex-right">
+                      <div>${config.activityPlaats || ''}</div>
+                      <div>${config.activityAdres || ''}</div>
+                  </div>
              </div>
-             <div id="top-test-center">
-                 <div id="top-title-main">${config.inschrijvingTitel || 'Inschrijving'} ${config.subtypeTitel ? `<span>${config.subtypeTitel}</span>` : ''}</div>
-                 <div id="top-title-activity">${config.activityNaam || ''}</div>
-            </div>
-             <div id="top-test-right">
-                 <div>${config.activityPlaats || ''}</div>
-                 <div>${config.activityAdres || ''}</div>
-             </div>
-        </div>
-        <!-- EINDE VEREENVOUDIGDE HEADER HTML -->
+         </div>
+         <!-- EINDE AANGEPASTE HEADER STRUCTUUR -->
 
         <div id="filenaam" style="display:none;">${config.filename || ''}</div>
         <div id="checkafzender" style="display:none;">${config.checkstring || ''}</div>
@@ -245,7 +237,16 @@ document.addEventListener('DOMContentLoaded', () => {
                          const createListItems = (text) => (text || '').split('\n').map(line => line.trim()).filter(line => line).map(line => `<div>${line.startsWith('•') ? '' : '• '}${line.replace(/^•\s*/, '')}</div>`).join('\n');
 
                          if (config.optFysiekDigitaal) {
-                            dynamicHTML += `...`; // F/D HTML blok (hetzelfde als voorheen)
+                             dynamicHTML += `
+                         <div id="deelname">
+                             <div>Deelname</div>
+                              <div><input class="inln" id="fysiek" type="radio" value="fysiek" name="keuzeDeelname" checked="checked"><label class="inln" for="fysiek">${config.labelFysiek || 'Fysiek'}</label></div>
+                              <div><input class="inln" id="digitaal" type="radio" value="digitaal" name="keuzeDeelname"><label class="inln" for="digitaal">${config.labelDigitaal || 'Digitaal'}</label></div>
+                             <div class="info-header">Fysieke deelname:</div>
+                             ${createListItems(config.textFysiek)}
+                             <div class="info-header">Digitale deelname:</div>
+                              ${createListItems(config.textDigitaal)}
+                         </div>`;
                          }
                          if (config.optMoederdag) {
                              dynamicHTML += `\n${config.htmlMoederdag || '<!-- Moederdag HTML ontbreekt -->'}\n`;
@@ -266,20 +267,22 @@ document.addEventListener('DOMContentLoaded', () => {
                               if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
                               iframeDoc.open();
                               iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
-                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`);
+                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`); // style.css moet in dezelfde map staan!
                               iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
                               iframeDoc.write('</head><body>');
                               const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '';
-                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, ''); // Verwijder scripts
+                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '<!-- Body inhoud niet gevonden -->';
+                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, '<!-- Script verwijderd voor preview -->');
                               iframeDoc.write(bodyContent);
                               iframeDoc.write('</body></html>');
                               iframeDoc.close();
                               console.log("Generator Script: Preview bijgewerkt (zonder scripts).");
                          } catch (e) {
                               console.error("Generator Script: Preview bijwerken mislukt:", e);
-                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}.</i></p>`;
+                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}. Code staat wel in het tekstvak hieronder.</i></p>`;
                          }
+                         // --- EINDE Preview Update ---
+
                      } catch (error) {
                          console.error("Generator Script: Fout tijdens genereren:", error);
                          alert(`Fout tijdens genereren: ${error.message}.`);
@@ -292,16 +295,35 @@ document.addEventListener('DOMContentLoaded', () => {
              // Koppel Kopieer knop listener
              const copyButton = document.getElementById('btn-copy');
              if (copyButton) {
-                copyButton.addEventListener('click', function() { /* ... kopieer logica ... */ });
+                copyButton.addEventListener('click', function() {
+                    const outputCode = document.getElementById('output-code');
+                     if (!outputCode.value || outputCode.value.startsWith('// Fout')) { alert("Genereer eerst de code succesvol!"); return; }
+                    outputCode.select();
+                    try {
+                         const successful = document.execCommand('copy');
+                         alert(successful ? "Code gekopieerd!" : "Kon niet automatisch kopiëren.");
+                    } catch (err) { alert("Kon niet automatisch kopiëren."); }
+                     if (window.getSelection) {window.getSelection().removeAllRanges();}
+                     else if (document.selection) {document.selection.empty();}
+                });
              } else { console.error("Generator Script: Knop 'btn-copy' niet gevonden!"); }
 
              // Koppel Download knop listener
              const downloadButton = document.getElementById('btn-download');
              if (downloadButton) {
-                downloadButton.addEventListener('click', function() { /* ... download logica ... */ });
+                downloadButton.addEventListener('click', function() {
+                    const code = document.getElementById('output-code').value;
+                    if (!code || code.startsWith('// Fout')) { alert("Genereer eerst de code succesvol!"); return; }
+                    const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    const filenameBase = document.getElementById('gen-filename')?.value?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'formulier';
+                    link.download = filenameBase + '_index.html';
+                    document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(link.href);
+                });
              } else { console.error("Generator Script: Knop 'btn-download' niet gevonden!"); }
 
              console.log("Generator Script: Initialisatie script voltooid.");
 
-    // EINDE VAN DOMContentLoaded listener
-    });
+// EINDE VAN DOMContentLoaded listener
+});
