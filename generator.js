@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (config.optEten && !config.labelAantalAct) { config.labelAantalAct = config.labelAantal; }
                  console.log("Generator Script: Configuratie gelezen.");
 
-                 // --- 3. Basis HTML Template String (met aangepaste @media query!) ---
+                 // --- 3. Basis HTML Template String (Nieuwe Grid Header CSS/HTML) ---
                  let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -107,77 +107,86 @@ document.addEventListener('DOMContentLoaded', () => {
     <meta name="Author" content="Diabetes Liga Midden-Limburg">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <style>
-        /* Extra CSS specifiek voor de header layout (Flexbox met !important) */
-        #top { padding: 0 !important; background-color: #663ab7 !important; color: white !important; display: block !important; margin-bottom: -1px !important; }
-        #top-flex { display: flex !important; flex-wrap: wrap !important; justify-content: space-between !important; align-items: center !important; width: 100% !important; padding: 15px 15px !important; box-sizing: border-box !important; text-align: center !important; font-family: 'Roboto', sans-serif !important; }
-        #top-flex-center { flex-grow: 1; padding: 0 10px; margin-bottom: 10px; }
-        #top-title-main { font-size: 28px; font-weight: bold; line-height: 1.1; margin-bottom: 5px; }
+        /* Header styling met GRID - Nieuwe poging */
+        #top { background-color: #663ab7; color: white; padding: 0; display: block; margin-bottom: -1px;}
+        #header-grid {
+            display: grid;
+            /* Kolommen: Links - Midden (titels) - Rechts */
+            grid-template-columns: 1fr auto 1fr;
+            /* Rijen: Titel lijn 1, Titel lijn 2, Data lijn */
+            grid-template-rows: auto auto auto;
+            gap: 5px 15px; /* Ruimte tussen cellen */
+            width: 100%;
+            padding: 15px 10px;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        /* Titels in de middelste kolom, rijen 1 en 2 */
+        #top-title-main { grid-column: 2 / 3; grid-row: 1; font-size: 28px; font-weight: bold; line-height: 1.1; text-align: center;}
         #top-title-main span { font-size: 0.8em; font-weight: normal; margin-left: 10px; }
-        #top-title-activity { font-size: 22px; line-height: 1.1; }
-        #top-flex-left, #top-flex-right { font-size: 16px; line-height: 1.4 !important; min-width: 180px; padding-top: 5px; }
-        #top-flex-left { text-align: left !important; }
-        #top-flex-right { text-align: right !important; }
+        #top-title-activity { grid-column: 2 / 3; grid-row: 2; font-size: 22px; line-height: 1.1; text-align: center; margin-bottom: 10px; } /* Iets ruimte onder titels */
 
-         /* Responsive aanpassing (MEEST COMPACTE VERSIE) */
+        /* Data cellen op rij 3 */
+        #header-data-left { grid-column: 1 / 2; grid-row: 3; text-align: left; padding-left: 10px; }
+        #header-data-right { grid-column: 3 / -1; grid-row: 3; text-align: right; padding-right: 10px; }
+
+        /* Styling voor de inhoud van de data cellen */
+        #header-data-left div, #header-data-right div {
+            font-size: 16px;
+            line-height: 1.4; /* Belangrijk: consistente line-height */
+            margin: 0; /* Reset marges */
+            padding: 0; /* Reset padding */
+        }
+
+         /* Responsive aanpassing */
          @media (max-width: 700px) {
-             #top-flex {
-                 flex-direction: column !important; /* Forceer kolom */
-                 align-items: center !important; /* Forceer centreren */
-                 justify-content: flex-start !important; /* Begin bovenaan */
-                 padding: 10px 5px !important; /* Mobiele padding */
-                 text-align: center !important; /* Forceer tekst centreren */
+             #header-grid {
+                 grid-template-columns: 1fr; /* 1 kolom */
+                 grid-template-rows: auto auto auto auto; /* Titel1, Titel2, Links, Rechts */
+                 gap: 5px 10px;
+                 padding: 10px 5px;
+                 text-align: center; /* Centreer alles */
              }
-             /* Reset basis flex-eigenschappen voor de blokken */
-             #top-flex-left,
-             #top-flex-right,
-             #top-flex-center {
-                  order: 0; /* Reset volgorde basis */
-                  width: 100% !important; /* Forceer volle breedte */
-                  text-align: center !important; /* Forceer centreren */
-                  min-width: unset !important; /* Reset min-width */
-                  margin-bottom: 5px !important; /* Kleinere, geforceerde marge */
-                  padding: 0 !important; /* Geen extra padding binnen blok */
+             /* Zet alles in kolom 1 */
+             #top-title-main, #top-title-activity, #header-data-left, #header-data-right {
+                 grid-column: 1 / -1;
+                 text-align: center !important; /* Forceer centreren */
+                 padding: 0 !important; /* Reset padding */
              }
-              /* Bepaal volgorde expliciet */
-              #top-flex-center { order: 1; margin-bottom: 8px; } /* Titels eerst, iets minder ruimte */
-              #top-flex-left { order: 2; } /* Datum/tijd daarna */
-              #top-flex-right { order: 3; } /* Locatie/adres laatst */
+             /* Bepaal volgorde */
+              #top-title-main { grid-row: 1; font-size: 22px;}
+              #top-title-activity { grid-row: 2; font-size: 18px; margin-bottom: 8px;}
+              #header-data-left { grid-row: 3; }
+              #header-data-right { grid-row: 4; }
 
-              /* Styling voor de tekstregels *binnen* de blokken op MOBIEL (COMPACTER) */
-              #top-flex-left > div,
-              #top-flex-right > div {
-                   margin-bottom: 0px !important; /* GEEN ruimte onder elke regel */
-                   padding: 0px 0 !important;     /* GEEN verticale padding */
-                   line-height: 1.2 !important; /* Zeer compacte regelhoogte */
-                   text-align: center !important; /* Extra zekerheid: centreer */
-              }
-
-              /* Titel styling aanpassen voor mobiel indien nodig */
-              #top-title-main { font-size: 22px; }
-              #top-title-activity { font-size: 18px; }
+              /* Compactere spacing op mobiel */
+              #header-data-left div, #header-data-right div {
+                  line-height: 1.3;
+                  margin-bottom: 2px;
+             }
          }
     </style>
 </head>
 <body>
     <div id="content">
-         <!-- AANGEPASTE HEADER STRUCTUUR -->
+         <!-- NIEUWE GRID HEADER HTML -->
          <div id="top">
-             <div id="top-flex">
-                  <div id="top-flex-left">
-                      <div>${config.activityDatum || ''}</div>
-                      <div>${config.activityUur || ''}</div>
-                  </div>
-                  <div id="top-flex-center">
-                      <div id="top-title-main">${config.inschrijvingTitel || 'Inschrijving'} ${config.subtypeTitel ? `<span>${config.subtypeTitel}</span>` : ''}</div>
-                      <div id="top-title-activity">${config.activityNaam || ''}</div>
+             <div id="header-grid">
+                 <div id="top-title-main">${config.inschrijvingTitel || 'Inschrijving'} ${config.subtypeTitel ? `<span>${config.subtypeTitel}</span>` : ''}</div>
+                 <div id="top-title-activity">${config.activityNaam || ''}</div>
+
+                 <div id="header-data-left">
+                     <div>${config.activityDatum || ''}</div>
+                     <div>${config.activityUur || ''}</div>
                  </div>
-                  <div id="top-flex-right">
-                      <div>${config.activityPlaats || ''}</div>
-                      <div>${config.activityAdres || ''}</div>
-                  </div>
+                  <!-- Middelste kolom blijft leeg voor data rij -->
+                 <div id="header-data-right">
+                     <div>${config.activityPlaats || ''}</div>
+                     <div>${config.activityAdres || ''}</div>
+                 </div>
              </div>
          </div>
-         <!-- EINDE AANGEPASTE HEADER STRUCTUUR -->
+         <!-- EINDE NIEUWE GRID HEADER HTML -->
 
         <div id="filenaam" style="display:none;">${config.filename || ''}</div>
         <div id="checkafzender" style="display:none;">${config.checkstring || ''}</div>
@@ -282,22 +291,20 @@ document.addEventListener('DOMContentLoaded', () => {
                               if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
                               iframeDoc.open();
                               iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
-                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`); // style.css moet in dezelfde map staan!
+                              iframeDoc.write(`<link rel="stylesheet" href="style.css?t=${Date.now()}">`);
                               iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
                               iframeDoc.write('</head><body>');
                               const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
-                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '<!-- Body inhoud niet gevonden -->';
-                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, '<!-- Script verwijderd voor preview -->');
+                              let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '';
+                              bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, ''); // Verwijder scripts
                               iframeDoc.write(bodyContent);
                               iframeDoc.write('</body></html>');
                               iframeDoc.close();
                               console.log("Generator Script: Preview bijgewerkt (zonder scripts).");
                          } catch (e) {
                               console.error("Generator Script: Preview bijwerken mislukt:", e);
-                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}. Code staat wel in het tekstvak hieronder.</i></p>`;
+                              previewArea.innerHTML = `<p style="color:red;"><i>Preview kon niet worden geladen: ${e.message}.</i></p>`;
                          }
-                         // --- EINDE Preview Update ---
-
                      } catch (error) {
                          console.error("Generator Script: Fout tijdens genereren:", error);
                          alert(`Fout tijdens genereren: ${error.message}.`);
