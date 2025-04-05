@@ -1,4 +1,4 @@
-// === generator.js (Versie die originele header structuur genereert) ===
+// === generator.js (Fix preview + knoppen) ===
 
 // Functie definitie BOVENAAN
 function toggleSubOptions(divId, show) {
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (config.optEten && !config.labelAantalAct) { config.labelAantalAct = config.labelAantal; }
                  console.log("Generator Script: Configuratie gelezen.");
 
-                 // --- 3. Basis HTML Template String (met ORIGINELE Header Structuur en GEEN inline style) ---
+                 // --- 3. Basis HTML Template String (Terug naar originele header structuur) ---
                  let outputHTML = `<!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -127,19 +127,18 @@ document.addEventListener('DOMContentLoaded', () => {
         <div id="filenaam" style="display:none;">${config.filename || ''}</div>
         <div id="checkafzender" style="display:none;">${config.checkstring || ''}</div>
         <form id="myForm" action="#" method="post" accept-charset="utf-8">
-            <!-- Vul hier de VOLLEDIGE formulier template in, inclusief alle .replace() calls -->
-             <label class="lnfd" for="naam">${config.labelNaam || 'Naam (*)'}<span> gelieve uw naam in te vullen! </span><br><input type="text" id="naam" name="naam" size="30" placeholder="Naam"></label>
-             <label class="lnfd" for="voornaam">${config.labelVoornaam || 'Voornaam'}<br><input type="text" id="voornaam" name="voornaam" size="25" placeholder="Voornaam"></label>
-             <label for="email">${config.labelEmail || 'E-mail (**)'}<span> gelieve uw e-mail te noteren! </span><br><input class="lnfd" type="text" id="email" name="email" size="40" placeholder="@emaildomein.be"></label>
-             <label for="tel">${config.labelTel || 'Tel/GSM'}<br><input class="lnfd" type="text" id="tel" name="tel" size="25" placeholder="Telefoonnummer"></label>
-             %%DYNAMIC_SECTIONS%%
-             ${!config.optMoederdag ? `<label for="aantal">${config.optEten ? (config.labelAantalAct || config.labelAantal) : (config.labelAantal || 'Aantal deelnemers (*)')}<span> gelieve het aantal deelnemers te vermelden! </span><br><input class="lnfd" type="text" id="aantal" name="aantal" size="8" value="" placeholder="Aantal">${config.optEten && config.textAantalAct ? `<span style="display: block; font-weight: normal; font-size: 14px; margin-top: -10px; margin-bottom: 10px;">${config.textAantalAct.replace(/\n/g, '<br>')}</span>` : ''}</label>` : ''}
-             ${config.optEten ? `<label for="eten_input">${config.labelEten || 'Extra optie'}<br><input class="lnfd" type="text" id="eten_input" name="eten_details" size="30" placeholder="Aantal of details">${config.textEten ? `<span style="display: block; font-weight: normal; font-size: 14px; margin-top: -10px; margin-bottom: 10px;">${config.textEten.replace(/\n/g, '<br>')}</span>` : ''}</label>` : ''}
-             ${config.optAttest ? `<label class="lnfd" for="attest"><input id="attest" name="attest" type="checkbox" value="ja"> ${config.textAttest || 'Wenst een deelname-attest'}</label>` : ''}
-             <label for="opmerkingen">${config.labelOpmerkingen || 'Opmerkingen'}</label><textarea class="lnfd" id="opmerkingen" name="opmerkingen" cols="35" rows="6"></textarea>
-             <button class="lnfd" id="btnSubmit" type="submit">Inschrijven</button><button id="fakeBtnSubmit" type="button">Inschrijven</button><div class="lnfd" id="txtFakeBtnSubmit">${config.textFakeButton || 'Gelieve alle verplichte velden in te vullen'}</div><div id="txtVerplicht">${config.textVerplicht || '(*) velden zijn verplicht'}<br>${config.optFysiekDigitaal ? (config.textEmailVerplicht || '(**) verplicht voor digitale deelname') + '<br>' : ''}</div><div style="width:100%; height:1px; margin-bottom: 0;"> </div>
-             <img id="logoDL" alt="Logo DLML" src="logo.png">
-             <div id="containerBevestiging"><div id="bevestiging"><div id="bevestigingTitel"> </div><div id="bevestigingMsg">Inschrijving wordt verwerkt...</div><div id="btnOK">Ok</div></div></div>
+            <label class="lnfd" for="naam">${config.labelNaam || 'Naam (*)'}<span> gelieve uw naam in te vullen! </span><br><input type="text" id="naam" name="naam" size="30" placeholder="Naam"></label>
+            <label class="lnfd" for="voornaam">${config.labelVoornaam || 'Voornaam'}<br><input type="text" id="voornaam" name="voornaam" size="25" placeholder="Voornaam"></label>
+            <label for="email">${config.labelEmail || 'E-mail (**)'}<span> gelieve uw e-mail te noteren! </span><br><input class="lnfd" type="text" id="email" name="email" size="40" placeholder="@emaildomein.be"></label>
+            <label for="tel">${config.labelTel || 'Tel/GSM'}<br><input class="lnfd" type="text" id="tel" name="tel" size="25" placeholder="Telefoonnummer"></label>
+            %%DYNAMIC_SECTIONS%%
+            ${!config.optMoederdag ? `<label for="aantal">${config.optEten ? (config.labelAantalAct || config.labelAantal) : (config.labelAantal || 'Aantal deelnemers (*)')}<span> gelieve het aantal deelnemers te vermelden! </span><br><input class="lnfd" type="text" id="aantal" name="aantal" size="8" value="" placeholder="Aantal">${config.optEten && config.textAantalAct ? `<span style="display: block; font-weight: normal; font-size: 14px; margin-top: -10px; margin-bottom: 10px;">${config.textAantalAct.replace(/\n/g, '<br>')}</span>` : ''}</label>` : ''}
+            ${config.optEten ? `<label for="eten_input">${config.labelEten || 'Extra optie'}<br><input class="lnfd" type="text" id="eten_input" name="eten_details" size="30" placeholder="Aantal of details">${config.textEten ? `<span style="display: block; font-weight: normal; font-size: 14px; margin-top: -10px; margin-bottom: 10px;">${config.textEten.replace(/\n/g, '<br>')}</span>` : ''}</label>` : ''}
+            ${config.optAttest ? `<label class="lnfd" for="attest"><input id="attest" name="attest" type="checkbox" value="ja"> ${config.textAttest || 'Wenst een deelname-attest'}</label>` : ''}
+            <label for="opmerkingen">${config.labelOpmerkingen || 'Opmerkingen'}</label><textarea class="lnfd" id="opmerkingen" name="opmerkingen" cols="35" rows="6"></textarea>
+            <button class="lnfd" id="btnSubmit" type="submit">Inschrijven</button><button id="fakeBtnSubmit" type="button">Inschrijven</button><div class="lnfd" id="txtFakeBtnSubmit">${config.textFakeButton || 'Gelieve alle verplichte velden in te vullen'}</div><div id="txtVerplicht">${config.textVerplicht || '(*) velden zijn verplicht'}<br>${config.optFysiekDigitaal ? (config.textEmailVerplicht || '(**) verplicht voor digitale deelname') + '<br>' : ''}</div><div style="width:100%; height:1px; margin-bottom: 0;"> </div>
+            <img id="logoDL" alt="Logo DLML" src="logo.png">
+            <div id="containerBevestiging"><div id="bevestiging"><div id="bevestigingTitel"> </div><div id="bevestigingMsg">Inschrijving wordt verwerkt...</div><div id="btnOK">Ok</div></div></div>
         </form>
         <div style="width:100%; height:25px;"> </div>
     </div>
@@ -167,14 +166,13 @@ document.addEventListener('DOMContentLoaded', () => {
                          if (config.optMoederdag) {
                              dynamicHTML += `\n${config.htmlMoederdag || '<!-- Moederdag HTML ontbreekt -->'}\n`;
                          }
-                         // Vervang de placeholder
                          outputHTML = outputHTML.replace('%%DYNAMIC_SECTIONS%%', dynamicHTML);
 
                          // --- 5. Zet de volledige HTML in de textarea ---
                          document.getElementById('output-code').value = outputHTML;
                          console.log("Generator Script: HTML generatie voltooid.");
 
-                         // --- 6. Update Preview (Vereenvoudigd) ---
+                         // --- 6. Update Preview (met Inline CSS van externe style.css) ---
                          const previewArea = document.getElementById('preview-area');
                          try {
                               previewArea.innerHTML = '<iframe id="preview-iframe" style="width: 100%; height: 600px; border: none;" title="Formulier Preview"></iframe>';
@@ -183,35 +181,45 @@ document.addEventListener('DOMContentLoaded', () => {
                               const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                               if (!iframeDoc) throw new Error("Kon geen toegang krijgen tot iframe document.");
 
-                              // Probeer externe CSS te laden voor preview
-                              fetch('style.css')
+                              // Haal EXTERNE CSS op en zet deze inline voor preview
+                              fetch('style.css') // Pad relatief aan generator.html
                                  .then(response => {
-                                     if (!response.ok) { throw new Error(`Kon style.css niet laden: ${response.statusText}`); }
+                                     if (!response.ok) { return Promise.reject(`Kon style.css niet laden: ${response.statusText}`); }
                                      return response.text();
                                  })
                                  .then(externalCss => {
                                      iframeDoc.open();
                                      iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
-                                     iframeDoc.write('<style data-source="external">'); // Gebruik externe CSS
+                                     iframeDoc.write('<style data-source="external">'); // Externe CSS eerst
                                      iframeDoc.write(externalCss);
                                      iframeDoc.write('</style>');
+                                     // Voeg GEEN inline header CSS meer toe
+                                     iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
+                                     iframeDoc.write('</head><body>');
+                                     const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                                     let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '';
+                                     bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, ''); // Verwijder scripts
+                                     bodyContent = bodyContent.replace(/<link rel="stylesheet" href="style.css">/i, ''); // Verwijder externe link in body
+                                     iframeDoc.write(bodyContent);
+                                     iframeDoc.write('</body></html>');
+                                     iframeDoc.close();
+                                     console.log("Generator Script: Preview bijgewerkt (met inline CSS).");
+                                 })
+                                 .catch(e => { // Vang fouten op bij het fetchen van CSS
+                                     console.error("Generator Script: Fout bij laden externe CSS voor preview:", e);
+                                     previewArea.innerHTML = `<p style="color:orange;"><i>Preview styling kon niet laden (${e.message}). Probeer pagina te verversen of check of style.css bestaat.</i></p>`;
+                                     // Fallback zonder styling
+                                     iframeDoc.open();
+                                     iframeDoc.write('<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">');
                                      iframeDoc.write("<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>");
                                      iframeDoc.write('</head><body>');
                                      const bodyContentMatch = outputHTML.match(/<body[^>]*>([\s\S]*)<\/body>/i);
                                      let bodyContent = bodyContentMatch && bodyContentMatch[1] ? bodyContentMatch[1] : '';
                                      bodyContent = bodyContent.replace(/<script[\s\S]*?<\/script>/gi, '');
+                                     bodyContent = bodyContent.replace(/<link rel="stylesheet" href="style.css">/i, '');
                                      iframeDoc.write(bodyContent);
                                      iframeDoc.write('</body></html>');
                                      iframeDoc.close();
-                                     console.log("Generator Script: Preview bijgewerkt (met externe CSS).");
-                                 })
-                                 .catch(e => {
-                                     console.warn("Generator Script: Kon externe CSS niet laden voor preview:", e);
-                                     // Fallback zonder externe CSS
-                                     iframeDoc.open();
-                                     iframeDoc.write('<!DOCTYPE html>...'); // Basis HTML zonder externe CSS link
-                                     iframeDoc.close();
-                                     previewArea.insertAdjacentHTML('afterbegin', `<p style="color:orange; font-size: small; text-align: center;"><i>Preview zonder externe styling.</i></p>`);
                                  });
 
                          } catch (e) {
@@ -230,13 +238,37 @@ document.addEventListener('DOMContentLoaded', () => {
              // Koppel Kopieer knop listener
              const copyButton = document.getElementById('btn-copy');
              if (copyButton) {
-                copyButton.addEventListener('click', function() { /* ... kopieer logica ... */ });
+                copyButton.addEventListener('click', function() {
+                    const outputCode = document.getElementById('output-code');
+                     if (!outputCode.value || outputCode.value.startsWith('// Fout')) { alert("Genereer eerst de code succesvol!"); return; }
+                    outputCode.select();
+                    try {
+                         if (navigator.clipboard && navigator.clipboard.writeText) {
+                             navigator.clipboard.writeText(outputCode.value).then(() => { alert("Code gekopieerd!"); }, () => { alert("Kon niet automatisch kopiëren (probeer handmatig)."); });
+                         } else {
+                             const successful = document.execCommand('copy');
+                             alert(successful ? "Code gekopieerd!" : "Kon niet automatisch kopiëren (probeer handmatig).");
+                         }
+                    } catch (err) { alert("Kon niet automatisch kopiëren (probeer handmatig)."); }
+                     if (window.getSelection) {window.getSelection().removeAllRanges();} else if (document.selection) {document.selection.empty();}
+                });
+                 console.log("Generator Script: Listener voor 'Kopieer' knop toegevoegd.");
              } else { console.error("Generator Script: Knop 'btn-copy' niet gevonden!"); }
 
              // Koppel Download knop listener
              const downloadButton = document.getElementById('btn-download');
              if (downloadButton) {
-                downloadButton.addEventListener('click', function() { /* ... download logica ... */ });
+                downloadButton.addEventListener('click', function() {
+                    const code = document.getElementById('output-code').value;
+                    if (!code || code.startsWith('// Fout')) { alert("Genereer eerst de code succesvol!"); return; }
+                    const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    const filenameBase = document.getElementById('gen-filename')?.value?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'formulier';
+                    link.download = filenameBase + '_index.html';
+                    document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(link.href);
+                });
+                 console.log("Generator Script: Listener voor 'Download' knop toegevoegd.");
              } else { console.error("Generator Script: Knop 'btn-download' niet gevonden!"); }
 
              console.log("Generator Script: Initialisatie script voltooid.");

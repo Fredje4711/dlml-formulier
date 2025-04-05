@@ -32,7 +32,7 @@ html, body {
     height: auto;
     background-color: #663ab7; /* Paarse achtergrond */
     color: #ffffff; /* Witte tekst */
-    padding: 0; /* Geen padding op container */
+    padding: 0; /* Geen padding op de container zelf */
     box-sizing: border-box;
     text-align: center;
 }
@@ -73,6 +73,7 @@ html, body {
     padding-left: 25px; /* Extra padding links */
     font-size: 16px;
     clear: both; /* Zorg dat deze op nieuwe regel start */
+    /* Geen negatieve marge hier */
 }
 /* Plaats (regel 5) & Adres (regel 8) - Rechts uitlijnen */
 #top > div:nth-child(5),
@@ -82,8 +83,7 @@ html, body {
     text-align: right;
     padding-right: 25px; /* Extra padding rechts */
     font-size: 16px;
-    /* Belangrijk: Negatieve marge om ze visueel naast elkaar te krijgen */
-    margin-top: -1.4em; /* Trek deze omhoog (ongeveer 1 regel) */
+    margin-top: -1.4em; /* Trek deze omhoog (ongeveer 1 regel = 1.4 * font-size) */
     position: relative; /* Nodig voor correcte positionering */
 }
 /* Correctie voor float/marge Adres (regel 8) */
@@ -114,6 +114,7 @@ html, body {
      #top > div:nth-child(9) { height: 5px; }
 }
 /* EINDE HEADER SECTIE */
+
 
 /* === Formulier Sectie (#myForm) === */
 #myForm {
@@ -201,21 +202,29 @@ input::placeholder, textarea::placeholder {
 textarea#opmerkingen { max-width: 100%; width: 400px; resize: none; min-height: 100px; }
 
 /* === Deelname Sectie (Grid Layout) === */
-#deelname { /* ... (zelfde als voorheen) ... */ }
-#deelname > div:first-child { /* ... (zelfde als voorheen) ... */ }
-#deelname div:has(input[type="radio"]) { /* ... (zelfde als voorheen) ... */ }
-#deelname input[type="radio"] { /* ... (zelfde als voorheen) ... */ }
-#deelname label.inln { /* ... (zelfde als voorheen) ... */ }
-#deelname .info-header { /* ... (zelfde als voorheen) ... */ }
-#deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { /* ... (zelfde als voorheen) ... */ }
+#deelname {
+    display: grid;
+    width: 100%; max-width: 500px;
+    grid-template-columns: 25px auto; grid-template-rows: auto;
+    justify-content: start; align-items: start;
+    column-gap: 10px; row-gap: 8px;
+    border: 1px solid #eee; padding: 15px; margin-bottom: 20px;
+    background-color: #f9f9f9; border-radius: 4px;
+}
+#deelname > div:first-child { grid-column: 1 / -1; font-weight: bold; margin-bottom: 10px; }
+#deelname div:has(input[type="radio"]) { grid-column: 1 / -1; display: flex; align-items: center; margin-bottom: 5px; }
+#deelname input[type="radio"] { margin: 0 5px 0 0; width: auto; max-width: none; cursor: pointer; }
+#deelname label.inln { margin: 0; font-weight: normal; cursor: pointer; }
+#deelname .info-header { grid-column: 1 / -1; font-weight: bold; margin-top: 15px; margin-bottom: 5px; padding-left: 5px; }
+#deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { grid-column: 1 / -1; padding-left: 5px; margin: 2px 0; line-height: 1.3; font-size: 15px; }
 
 /* === Attest Checkbox === */
-label[for="attest"] { /* ... (zelfde als voorheen) ... */ }
-#attest { /* ... (zelfde als voorheen) ... */ }
+label[for="attest"] { font-weight: normal; display: flex; align-items: center; cursor: pointer; margin-bottom: 0; }
+#attest { width: auto; max-width: none; margin-right: 8px; margin-top: 0; cursor: pointer; }
 
 /* === Knoppen === */
-#btnSubmit, #fakeBtnSubmit { /* ... (zelfde als voorheen) ... */ }
-#btnSubmit { display: none; /* Belangrijk voor JS! */ background-color: #663ab7; color: #ffffff; border: 2px #663ab7 solid; }
+#btnSubmit, #fakeBtnSubmit { display: inline-block; text-align: center; font-size: 20px; line-height: 1.4; font-weight: 500; padding: 10px 25px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.3s ease; margin-top: 10px; margin-bottom: 5px; width: auto; min-width: 150px; }
+#btnSubmit { display: none; background-color: #663ab7; color: #ffffff; border: 2px #663ab7 solid; }
 #btnSubmit:hover { background-color: #512da8; border-color: #512da8; }
 #fakeBtnSubmit { display: block; background-color: #f2f2f2; color: #b0b0b0; border: 2px #d8d8d8 solid; cursor: not-allowed; }
 #txtFakeBtnSubmit { display: block; margin-left: 0; margin-top: 8px; margin-bottom: 15px; font-size: 14px; line-height: 1.3; font-weight: normal; padding: 1px 0 3px 0px; color: #ff0000; }
@@ -225,14 +234,23 @@ label[for="attest"] { /* ... (zelfde als voorheen) ... */ }
 #logoDL { display: block; position: absolute; top: 20px; right: 25px; width: 150px; height: auto; }
 
 /* === Bevestiging Pop-up === */
-#containerBevestiging { /* ... (zelfde als voorheen) ... */ }
-#containerBevestiging.visible { /* ... (zelfde als voorheen) ... */ }
-#bevestiging { /* ... (zelfde als voorheen) ... */ }
-#bevestiging:hover { /* ... (zelfde als voorheen) ... */ }
-#bevestigingTitel { /* ... (zelfde als voorheen) ... */ }
-#bevestigingMsg { /* ... (zelfde als voorheen) ... */ }
-#bevestiging #btnOK { /* ... (zelfde als voorheen) ... */ }
-#bevestiging #btnOK:hover { /* ... (zelfde als voorheen) ... */ }
+#containerBevestiging {
+    display: grid; position: fixed;
+    visibility: hidden; /* <<< ZORG DAT DIT hidden IS */
+    opacity: 0;        /* <<< ZORG DAT DIT 0 IS */
+    z-index: 999; left: 0; top: 0; right: 0; bottom: 0;
+    justify-content: center; align-items: center;
+    background-color: rgba(135, 206, 250, 0.6);
+    transition: visibility 0s linear 0.3s, opacity 0.3s ease-in-out;
+    padding: 20px; box-sizing: border-box;
+}
+#containerBevestiging.visible { visibility: visible; opacity: 1; transition: visibility 0s linear 0s, opacity 0.3s ease-in-out; }
+#bevestiging { width: auto; min-width: 320px; max-width: 500px; background-color: #ffffff; color: #000000; border-top: 35px solid #7b68ee; border-left: 1px solid #ccc; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc; border-radius: 7px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); padding: 0; display: flex; flex-direction: column; text-align: center; }
+#bevestiging:hover { cursor: default; }
+#bevestigingTitel { color: #ffffff; font-size: 18px; line-height: 35px; font-weight: bold; text-align: center; padding: 0 15px; margin-top: -35px; margin-bottom: 20px; }
+#bevestigingMsg { padding: 0 25px 25px 25px; text-align: center; font-size: 17px; line-height: 1.6; font-weight: 500; flex-grow: 1; }
+#bevestiging #btnOK { align-self: center; font-size: 16px; font-weight: bold; background-color: #e4e4e4; color: #333; border: 1px #aaa solid; border-radius: 5px; padding: 8px 30px; margin: 0px 15px 20px 15px; cursor: pointer; transition: background-color 0.2s ease; }
+#bevestiging #btnOK:hover { background-color: #d0d0d0; }
 
 /* === Helper Classes === */
 .error-border { border: 2px solid #ff0000 !important; }
@@ -249,11 +267,11 @@ label[for="attest"] { /* ... (zelfde als voorheen) ... */ }
     #myForm { width: auto; max-width: none; margin: -10px 5px 10px 5px; padding: 20px 15px; }
     #logoDL { position: static; display: block; margin: 0 auto 20px auto; width: 130px; order: -1; }
     label { margin-bottom: 8px; }
-    input[type=text], input[type=email], textarea, #naam, #voornaam, #email, #tel, #aantal, textarea#opmerkingen { max-width: 100%; width: 100%; margin-top: 0; }
+    input[type=text], input[type=email], textarea { max-width: 100%; width: 100%; margin-top: 0; }
     textarea#opmerkingen { width: 100%; }
-    #deelname { /* ... (blijft hetzelfde) ... */ }
-    #deelname > div:first-child, #deelname .info-header, #deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { /* ... (blijft hetzelfde) ... */ }
-    #deelname div:has(input[type="radio"]) { /* ... (blijft hetzelfde) ... */ }
+    #deelname { grid-template-columns: 25px auto; column-gap: 5px; padding: 10px; }
+    #deelname > div:first-child, #deelname .info-header, #deelname div:not(:first-child):not(:has(input)):not(:has(label)):not(.info-header) { grid-column: 1 / -1; padding-left: 0; }
+    #deelname div:has(input[type="radio"]) { padding-left: 0; }
     #btnSubmit, #fakeBtnSubmit { width: 100%; box-sizing: border-box; }
     #bevestiging { width: 90%; min-width: unset; }
     #bevestigingTitel { font-size: 16px; margin-bottom: 15px; }
