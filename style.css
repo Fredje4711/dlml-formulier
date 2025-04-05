@@ -32,7 +32,7 @@ html, body {
     height: auto;
     background-color: #663ab7; /* Paarse achtergrond */
     color: #ffffff; /* Witte tekst */
-    padding: 25px 20px; /* Padding rondom, iets meer horizontaal */
+    padding: 10px 20px; /* Padding rondom, iets meer horizontaal */
     box-sizing: border-box; /* Padding telt mee in de breedte */
     text-align: center; /* Centreer tekst binnen #top */
 }
