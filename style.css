@@ -32,16 +32,16 @@ html, body {
     height: auto;
     background-color: #663ab7; /* Paarse achtergrond */
     color: #ffffff; /* Witte tekst */
-    padding: 10px 20px; /* Padding rondom, iets meer horizontaal */
+    padding: 25px 20px; /* Padding rondom, iets meer horizontaal */
     box-sizing: border-box; /* Padding telt mee in de breedte */
     text-align: center; /* Centreer tekst binnen #top */
 }
 
 /* Specifieke styling voor #top divs */
 #top div { width: 100%; } /* Maak alle divs standaard 100% breed */
-#top div:nth-child(1) { padding: 10px 0px 3px 0px; font-size: 28px; line-height: 1.1; font-weight: bold; } /* Titel */
+#top div:nth-child(1) { padding: 0px 0px 3px 0px; font-size: 28px; line-height: 1.1; font-weight: bold; } /* Titel */
 #top div:nth-child(2) { padding: 2px 0px 8px 0px; font-size: 22px; line-height: 1.1; } /* Ondertitel */
-#top div:nth-child(3) { height: 10px; } /* Spacer */
+#top div:nth-child(3) { height: 5px; } /* Spacer */
 #top div:nth-child(4), /* Datum */
 #top div:nth-child(5), /* Plaats */
 #top div:nth-child(7), /* Uur */
